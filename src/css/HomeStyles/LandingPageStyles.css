@@ -1,0 +1,11 @@
+#home-landing {
+    height: 100dvh;
+    background: #ffffff linear-gradient(351deg, #ffffff, #faffe5);
+    background-size: 600% 100%;
+    animation: gradient-home 5s linear infinite alternate;
+}
+
+@keyframes gradient-home {
+    0% {background-position: 0%;}
+    100% {background-position: 100%;}
+}

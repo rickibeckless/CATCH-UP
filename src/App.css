@@ -1,0 +1,16 @@
+@import url('./css/HomeStyles/HomeStyles.css');
+
+#main-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    background: #ffffff linear-gradient(351deg, #ffffff, #faffe5);
+    background-size: 600% 100%;
+    animation: gradient-home 5s linear infinite alternate;
+    border-bottom: 1px solid #ffffff;
+}
+
+.navbar-links {
+
+}
