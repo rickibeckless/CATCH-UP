@@ -1,5 +1,5 @@
 #home-landing {
-    height: 100dvh;
+    height: 94dvh;
     background: #ffffff linear-gradient(351deg, #ffffff, #faffe5);
     background-size: 600% 100%;
     animation: gradient-home 5s linear infinite alternate;

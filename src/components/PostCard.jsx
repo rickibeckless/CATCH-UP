@@ -23,6 +23,11 @@ export function PostCard() {
         return <h1>Loading...</h1>
     } */
 
+    const [isProfilePage, setIsProfilePage] = useState(location.pathname.startsWith('/profile/'));
+
+    useEffect(() => {
+        setIsProfilePage(location.pathname.startsWith('/profile/'));
+    }, [location.pathname]);
 
     return (
         <>
@@ -30,7 +35,7 @@ export function PostCard() {
                 <div className="blog-card">
                     <h2>blah</h2>
                     <p>blah</p>
-                    <Link to={`/post/`}>Read More</Link>
+                    {!isProfilePage && <Link to={`/post/`}>Read More</Link>}
                 </div>
             </div>
 
