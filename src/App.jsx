@@ -11,6 +11,7 @@ import { Gallery } from './pages/Gallery';
 import { SignUp } from './pages/userPages/SignUp';
 import { Profile } from './pages/userPages/Profile';
 import { SignIn } from './pages/userPages/SignIn';
+import { User } from './pages/User';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
@@ -23,6 +24,7 @@ function App() {
     const [isHomePage, setIsHomePage] = useState(location.pathname === '/');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
+    const [user_username, setUserUsername] = useState('');
 
     useEffect(() => {
         setIsHomePage(location.pathname === '/');
@@ -30,6 +32,7 @@ function App() {
         if (userId) {
             setIsLoggedIn(true);
             fetchUsername(userId);
+            fetchUserUsername(userId);
         } else {
             setIsLoggedIn(false);
             console.log('User is not logged in');
@@ -56,6 +59,26 @@ function App() {
         }
     };
 
+    const fetchUserUsername = async (user_username) => {
+        try {
+            const { data, error } = await supabase
+                .from('Users')
+                .select('username')
+                .eq('username', user_username)
+                .single();
+
+            if (error) {
+                throw error;
+            }
+
+            if (data) {
+                setUserUsername(data.user_username);
+            }
+        } catch (error) {
+            console.error('Error fetching user_username:', error.message);
+        }
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('userId');
         setIsLoggedIn(false);
@@ -79,7 +102,6 @@ function App() {
                 {isLoggedIn ? <Link to={`/profile/${username}`} className="navbar-links" id="profile-link">Profile</Link> : null}
 
                 {isLoggedIn ? <Link to="/" className="navbar-links" id="logout-link" onClick={handleLogout}>Logout</Link> : null}
-                {/* {isLoggedIn ? <Link to="/logout" className="navbar-links" id="logout-link">Logout</Link> : null} */}
             </nav>
 
             <div id="main-body">
@@ -90,7 +112,8 @@ function App() {
                     <Route path="/new-post" element={<CreatePost />} />
                     <Route path="/post/:id" element={<Post />} />
                     <Route path="/post/all" element={<Gallery />} />
-                    <Route path={`/profile/${username}`} element={<Profile />} />
+                    {isLoggedIn ? <Route path={`/profile/${username}`} element={<Profile />} /> : null}
+                    <Route path="/user/:user_username" element={<User />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>

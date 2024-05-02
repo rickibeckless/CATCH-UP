@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../../App';
 import { useNavigate } from "react-router-dom";
 
 export function CreatePost() {
     
+    const user_id = localStorage.getItem('userId');
+    const [user_username, setUserUsername] = useState('');
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [media, setMedia] = useState('');
@@ -12,6 +14,27 @@ export function CreatePost() {
     const [imageUrl, setImageUrl] = useState('');
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchUsername = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('Users')
+                    .select('username')
+                    .eq('id', user_id)
+                    .single();
+
+                if (error) {
+                    throw error;
+                }
+                setUserUsername(data.username);
+            } catch (error) {
+                console.error("Error fetching username:", error.message);
+            }
+        };
+
+        fetchUsername();
+    }, [localStorage.getItem('userId')]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,6 +45,8 @@ export function CreatePost() {
             }
 
             const { data, error } = await supabase.from('Posts').insert([{ 
+                user_id,
+                user_username,
                 title, 
                 content, 
                 media, 
@@ -38,11 +63,11 @@ export function CreatePost() {
             setFile(null);
             setUrl('');
             setImageUrl('');
+
+            navigate('/');
         } catch (error) {
             console.error("Error creating post:", error.message);
         }
-
-        navigate('/');
     };
 
     const convertFileToBase64 = (file) => {

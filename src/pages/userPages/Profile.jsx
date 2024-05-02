@@ -64,7 +64,7 @@ export function Profile() {
                     <p>About User</p>
                 </section>
                 <section id="user-key-works">
-                    <PostCard />
+                    
                 </section>
             </main>
         </>

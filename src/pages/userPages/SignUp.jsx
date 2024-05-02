@@ -36,13 +36,18 @@ export function SignUp() {
             setEmail('');
             setPassword('');
 
+            const { data: users, error: usersError } = await supabase
+                .from('Users')
+                .select('*')
+                .eq('username', username);
+            const user = users[0];
+            localStorage.setItem('userId', user.id);
+            navigate(`/profile/${username}`);            
+
             console.log("User created successfully");
         } catch (error) {
             console.error("Error creating user:", error.message);
         }
-
-        localStorage.setItem('userId', user.id);
-        navigate(`/profile/${username}`);
     };
 
     return (
