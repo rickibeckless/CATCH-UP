@@ -12,6 +12,8 @@ import { SignUp } from './pages/userPages/SignUp';
 import { Profile } from './pages/userPages/Profile';
 import { SignIn } from './pages/userPages/SignIn';
 import { User } from './pages/User';
+import { EditPost } from './pages/postsPages/EditPost';
+import { EditProfile } from './pages/userPages/EditProfile';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
@@ -99,7 +101,7 @@ function App() {
 
                 {isLoggedIn ? <Link to="/new-post" className="navbar-links" id="new-post-link">New Post</Link> : null}
 
-                {isLoggedIn ? <Link to={`/profile/${username}`} className="navbar-links" id="profile-link">Profile</Link> : null}
+                {isLoggedIn ? <p>Hello, <Link to={`/profile/${username}`} className="navbar-links" id="profile-link">{username}</Link></p> : null}
 
                 {isLoggedIn ? <Link to="/" className="navbar-links" id="logout-link" onClick={handleLogout}>Logout</Link> : null}
             </nav>
@@ -112,7 +114,9 @@ function App() {
                     <Route path="/new-post" element={<CreatePost />} />
                     <Route path="/post/:id" element={<Post />} />
                     <Route path="/post/all" element={<Gallery />} />
+                    {isLoggedIn ? <Route path={`/post/:id/edit`} element={<EditPost />} /> : null}
                     {isLoggedIn ? <Route path={`/profile/${username}`} element={<Profile />} /> : null}
+                    {isLoggedIn ? <Route path={`/profile/${username}/edit`} element={<EditProfile />} /> : null}
                     <Route path="/user/:user_username" element={<User />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>

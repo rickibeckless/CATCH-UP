@@ -19,7 +19,10 @@ export function Home() {
                     throw postError;
                 }
 
-                setPosts(postData);
+                const slicedData = postData.slice(0, 5);
+                const sortedData = slicedData.sort((a, b) => b.upvotes - a.upvotes);
+
+                setPosts(sortedData);
             } catch (error) {
                 console.error("Error fetching posts:", error.message);
             }  
@@ -36,33 +39,6 @@ export function Home() {
     const formatTime = (isoDate) => {
         const date = new Date(isoDate);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-    };
-
-    const handleUpvote = async (id) => {
-        try {
-            const { data: postData, error: postError } = await supabase
-                .from('Posts')
-                .select('upvotes')
-                .eq('id', id)
-                .single();
-            if (postError) {
-                throw postError;
-            }
-
-            const updatedUpvotes = postData.upvotes + 1;
-
-            const { data, error } = await supabase
-                .from('Posts')
-                .update({ upvotes: updatedUpvotes })
-                .eq('id', id);
-            if (error) {
-                throw error;
-            }
-
-            setPosts(prevState => ({ ...prevState, upvotes: updatedUpvotes }));
-        } catch (error) {
-            console.error("Error upvoting post:", error.message);
-        }
     };
 
     const sanitizedTitle = posts?.title?.replace(/[^\w\s]/gi, '');

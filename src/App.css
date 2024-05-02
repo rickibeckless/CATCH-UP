@@ -11,6 +11,10 @@
     background-size: 600% 100%;
     animation: gradient-home 5s linear infinite alternate;
     border-bottom: 1px solid #ffffff;
+
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
 }
 
 .navbar-links {
