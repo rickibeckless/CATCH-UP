@@ -1,5 +1,5 @@
 import { Link, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from "dompurify";
 import { supabase } from '../../App';
@@ -15,6 +15,8 @@ export function Post() {
     const [user, setUser] = useState({});
     const [post_comments, setPostComments] = useState([]);
     const [comment_content, setCommentContent] = useState('');
+    const [voteOnOwn, setVoteOnOwn] = useState(false);
+    const [allReadyVoted, setAlreadyVoted] = useState(false);
 
     const navigate = useNavigate();
 
@@ -85,10 +87,11 @@ export function Post() {
         fetchUser();
     }, [post.user_id]);
 
+    fetchPostComments();
+
     useEffect(() => {
         fetchCurrentUser();
         fetchPost();
-        fetchPostComments();
     }, [localStorage.getItem('userId')]);
 
     const handleUpvote = async (id) => {
@@ -103,9 +106,9 @@ export function Post() {
             }
 
             if (postData.user_id === user_id) {
-                console.log("You cannot upvote your own post");
+                setVoteOnOwn(true);
             } else if (postData?.upvotes_users?.includes(user_id)) {
-                console.log("You have already upvoted this post");
+                setAlreadyVoted(true);
             } else {
                 const updatedUserUpvotes = (user.upvotes_count || 0) + 1;
 
@@ -133,6 +136,17 @@ export function Post() {
             console.error("Error upvoting post:", error.message);
         }
     };
+
+    useEffect(() => {
+        if (allReadyVoted || voteOnOwn) {
+            const timer = setTimeout(() => {
+                if (allReadyVoted) setAlreadyVoted(false);
+                if (voteOnOwn) setVoteOnOwn(false);
+            }, 10000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [allReadyVoted, voteOnOwn]);
 
     const handleAddComment = async (e) => {
         e.preventDefault();
@@ -181,6 +195,7 @@ export function Post() {
                 throw commentError;
             }
 
+            fetchPostComments();
         } catch (error) {
             console.error("Error adding comment:", error.message);
         }
@@ -212,7 +227,17 @@ export function Post() {
                     <div className="sanitizedText" id="post-text">{parse(sanitizedPost)}</div>
                     <p>Upvotes: {post.upvotes}</p>
                     {user_id ? (
-                        <button className="upvote-btn" onClick={() => handleUpvote(post.id)}>Upvote</button>
+                        <React.Fragment>
+                            <button className="upvote-btn" onClick={() => handleUpvote(post.id)}>Upvote</button>
+                            
+                            {allReadyVoted && (
+                                <p>You've Already Upvoted!</p>
+                            )}
+
+                            {voteOnOwn && (
+                                <p>Can't Upvote Own Post!</p>
+                            )}
+                        </React.Fragment>
                     ) : (
                         <p><Link to="/signin">Sign in</Link> to upvote</p>
                     )}
@@ -229,7 +254,7 @@ export function Post() {
                     {post_comments?.map(comment => (
                         <div key={comment.id} className="comment">
                             <h3>{comment.comment_username}</h3>
-                            <p>{comment.comment_content}</p>
+                            <div>{parse(DOMPurify.sanitize(comment.comment_content)).length > 400 ? `${parse(DOMPurify.sanitize(comment.comment_content)).slice(0,400)}...` : parse(DOMPurify.sanitize(comment.comment_content))}</div>
                             <p>Posted on {formatDate(comment.created_at)} at {formatTime(comment.created_at)}</p>
                         </div>
                     ))}

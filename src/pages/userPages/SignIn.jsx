@@ -26,6 +26,7 @@ export function SignIn() {
                 const passwordMatch = await bcrypt.compare(password, user.password);
                 if (passwordMatch) {
                     localStorage.setItem('userId', user.id);
+                    console.log("User logged in successfully");
                     navigate('/');
                 } else {
                     console.error('Incorrect password');
@@ -34,7 +35,6 @@ export function SignIn() {
                 console.error('User not found');
             }
 
-            console.log("User logged in successfully");
         } catch (error) {
             console.error("Error logging in user:", error.message);
         }

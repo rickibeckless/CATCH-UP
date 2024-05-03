@@ -1,6 +1,8 @@
 import { Link, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../App';
 import { useState, useEffect } from 'react';
+import parse from 'html-react-parser';
+import DOMPurify from "dompurify";
 
 export function Gallery() {
 
@@ -105,7 +107,7 @@ export function Gallery() {
                             <div key={post._id} className="post">
                                 <h2>{post.title}</h2>
                                 <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
-                                <p>{post.content.length > 400 ? `${post.content.slice(0, 400)}...` : post.content}</p> {/* <p>{post.content}</p> */}
+                                <p>{parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}</p>
                                 <Link to={`/post/${post.id}`}>Read More</Link>
                             </div>
                         ))}

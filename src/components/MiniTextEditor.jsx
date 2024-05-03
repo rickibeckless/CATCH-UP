@@ -1,10 +1,16 @@
 import { Link, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 
 export function MiniTextEditor({ value, onChange }) {
     const [editorContent, setEditorContent] = useState(value);
+
+    const editorRef = useRef(null);
+
+    useEffect(() => {
+        setEditorContent(value);
+    }, [value]);
 
     const handleEditorChange = (newContent) => {
         setEditorContent(newContent);
@@ -37,6 +43,7 @@ export function MiniTextEditor({ value, onChange }) {
 
     return (
         <ReactQuill 
+            ref={editorRef}
             value={editorContent} 
             onChange={handleEditorChange}
             modules={modules}

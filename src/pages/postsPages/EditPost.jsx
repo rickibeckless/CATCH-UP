@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../App';
 import { Link, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { TextEditor } from '../../components/TextEditor';
+import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
+import parse from 'html-react-parser';
+import DOMPurify from "dompurify";
 
 export function EditPost() {
 
@@ -149,7 +154,7 @@ export function EditPost() {
                 
                 <h3>{post.title}</h3>
 
-                <p>{post.content}</p>
+                <p>{parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}</p>
             </div>
 
             <form className="edit-post-form">
@@ -159,8 +164,9 @@ export function EditPost() {
                 </div>
 
                 <div className="form-input-holder">
-                    <label htmlFor="post-content">Post Content</label>
-                    <textarea className="form-input-field" id="post-content" onChange={(e) => setEditedContent(e.target.value)} placeholder="Post Content" required></textarea>                    
+                    <label htmlFor="post-content">Post Content</label>                
+                    <TextEditor onChange={(editedContent) => setEditedContent(editedContent)} />
+
                 </div>
 
                 {/* {!media && (

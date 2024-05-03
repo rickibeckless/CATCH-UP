@@ -102,7 +102,7 @@ export function Profile() {
                             {posts.map(post => (
                                 <div key={post._id} className="post">
                                     <h2>{post.title}</h2>
-                                    <p>{post.content.length > 400 ? `${post.content.slice(0, 400)}...` : post.content}</p> {/* <p>{post.content}</p> */}
+                                    <p>{parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}</p>
                                     <Link to={`/post/${post.id}`}>Read More</Link>
                                     <Link to={`/post/${post.id}/edit`}>Edit Post</Link>
                                 </div>
