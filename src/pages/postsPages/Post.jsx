@@ -1,29 +1,50 @@
 import { Link, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import parse from 'html-react-parser';
+import DOMPurify from "dompurify";
 import { supabase } from '../../App';
+import { TextEditor } from '../../components/TextEditor';
+import { MiniTextEditor } from '../../components/MiniTextEditor';
 
 export function Post() {
 
     const { id } = useParams();
     const user_id = localStorage.getItem('userId');
+    const [currentUser, setCurrentUser] = useState({});
     const [post, setPost] = useState([]);
     const [user, setUser] = useState({});
+    const [post_comments, setPostComments] = useState([]);
+    const [comment_content, setCommentContent] = useState('');
 
     const navigate = useNavigate();
+
+    const fetchCurrentUser = async () => {
+        try {
+            const { data: currentUserData, error: currentUserError } = await supabase
+                .from('Users')
+                .select('*')
+                .eq('id', user_id)
+                .single();
+            if (currentUserError) {
+                throw currentUserError;
+            }
+            setCurrentUser(currentUserData.username);
+        } catch (error) {
+            console.error("Error fetching current user:", error.message);
+        }
+    }
 
     const fetchUser = async () => {
         try {
             const { data: userData, error: userError } = await supabase
                 .from('Users')
                 .select('*')
-                .eq('username', user)
+                .eq('id', post.user_id)
                 .single();
             if (userError) {
                 throw userError;
             }
-            setUser(post.user_username);
-
-            console.log("User fetched successfully")
+            setUser(userData);
         } catch (error) {
             console.error("Error fetching user:", error.message);
         }  
@@ -45,9 +66,29 @@ export function Post() {
         }
     };
 
+    const fetchPostComments = async () => {
+        try {
+            const { data: postCommentData, error: postCommentError } = await supabase
+                .from('Comments')
+                .select('*')
+                .eq('posts_id', id);
+            if (postCommentError) {
+                throw postCommentError;
+            }
+            setPostComments(postCommentData);
+        } catch (error) {
+            console.error("Error fetching comments:", error.message);
+        }
+    };
+
     useEffect(() => {
         fetchUser();
+    }, [post.user_id]);
+
+    useEffect(() => {
+        fetchCurrentUser();
         fetchPost();
+        fetchPostComments();
     }, [localStorage.getItem('userId')]);
 
     const handleUpvote = async (id) => {
@@ -61,15 +102,21 @@ export function Post() {
                 throw postError;
             }
 
-            console.log(postData);
-            console.log(postData.user_id);
-            console.log(user_id);
-
             if (postData.user_id === user_id) {
                 console.log("You cannot upvote your own post");
             } else if (postData?.upvotes_users?.includes(user_id)) {
                 console.log("You have already upvoted this post");
             } else {
+                const updatedUserUpvotes = (user.upvotes_count || 0) + 1;
+
+                const { data: updateUserData, error: updateUserError } = await supabase
+                    .from('Users')
+                    .update({ upvotes_count: updatedUserUpvotes})
+                    .eq('username', post.user_username);
+                if (updateUserError) {
+                    throw updateUserError;
+                }
+
                 const updatedUpvotes = postData.upvotes + 1;
 
                 const { data: updateData, error: updateError } = await supabase
@@ -87,6 +134,58 @@ export function Post() {
         }
     };
 
+    const handleAddComment = async (e) => {
+        e.preventDefault();
+        try {
+            const { data: postData, error: postError } = await supabase
+                .from('Posts')
+                .select('*')
+                .eq('id', id)
+                .single();
+            if (postError) {
+                throw postError;
+            }
+
+            const updatedComments = postData.comments + 1;
+
+            const { data: commentCountData, error: commentCountError } = await supabase
+                .from('Posts')
+                .update({ comments: updatedComments })
+                .eq('id', id);
+            if (commentCountError) {
+                throw commentCountError;
+            }
+
+            const updatedUserComments = (user.comments_count || 0) + 1;
+
+            const { data: updateUserData, error: updateUserError } = await supabase
+                .from('Users')
+                .update({ comments_count: updatedUserComments})
+                .eq('username', post.user_username);
+            if (updateUserError) {
+                throw updateUserError;
+            }
+
+            const { data: commentData, error: commentError } = await supabase
+                .from('Comments')
+                .insert([
+                    { 
+                        posts_id: id,
+                        comment_content,
+                        comment_username: currentUser,
+                        user_id: user_id
+                    }
+                ]);
+                setCommentContent();
+            if (commentError) {
+                throw commentError;
+            }
+
+        } catch (error) {
+            console.error("Error adding comment:", error.message);
+        }
+    };
+
     const formatDate = (isoDate) => {
         const date = new Date(isoDate);
         return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',  });
@@ -96,6 +195,9 @@ export function Post() {
         const date = new Date(isoDate);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
     };
+
+    const sanitizedPost = DOMPurify.sanitize(post.content, { USE_PROFILES: { html: true } });
+    const sanitizedAboutMe = DOMPurify.sanitize(user.about_me, { USE_PROFILES: { html: true } });
 
     return (
         <>
@@ -107,15 +209,45 @@ export function Post() {
                         on <span>{formatDate(post.created_at)} </span> 
                         at <span>{formatTime(post.created_at)}</span> 
                     </p>
-                    <p>{post.content}</p>
+                    <div className="sanitizedText" id="post-text">{parse(sanitizedPost)}</div>
                     <p>Upvotes: {post.upvotes}</p>
-                    <button className="upvote-btn" onClick={() => handleUpvote(post.id)}>Upvote</button>
+                    {user_id ? (
+                        <button className="upvote-btn" onClick={() => handleUpvote(post.id)}>Upvote</button>
+                    ) : (
+                        <p><Link to="/signin">Sign in</Link> to upvote</p>
+                    )}
+                    <p>Comments: {post.comments}</p>
                 </section>
                 <section id="post-author-info">
                     <h2>{post.user_username}</h2>
-                    <p>{user.about_me}</p>
+                    <div className="sanitizedText" id="post-text">{parse(sanitizedAboutMe)}</div>
                 </section>
             </main>
+            <article id="post-comments">
+                <h2>Have something to say? Add a comment!</h2>
+                <section id="user-comments-holder">
+                    {post_comments?.map(comment => (
+                        <div key={comment.id} className="comment">
+                            <h3>{comment.comment_username}</h3>
+                            <p>{comment.comment_content}</p>
+                            <p>Posted on {formatDate(comment.created_at)} at {formatTime(comment.created_at)}</p>
+                        </div>
+                    ))}
+                </section>
+                
+                {user_id ? (
+                    <section id="add-comment">
+                        <form id="add-comment-form">
+                            <MiniTextEditor value={comment_content} onChange={(newComment) => setCommentContent(newComment)} />
+                            <button id="add-comment-btn" onClick={handleAddComment}>Add Comment</button>
+                        </form>
+                    </section>
+                ) : (
+                    <section id="add-comment">
+                        <p><Link to="/signin">Sign in</Link> to add a comment</p>
+                    </section>
+                )}
+            </article>
         </>
     )
 }

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../App';
 import { useNavigate } from "react-router-dom";
+import { TextEditor } from '../../components/TextEditor';
+import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
 
 export function CreatePost() {
     
@@ -44,19 +47,23 @@ export function CreatePost() {
                 fileData = await convertFileToBase64(file);
             }
 
-            const { data, error } = await supabase.from('Posts').insert([{ 
-                user_id,
-                user_username,
-                title, 
-                content, 
-                media, 
-                file: fileData, 
-                url 
-            }]);
+            const { data, error } = await supabase
+                .from('Posts')
+                .insert([{ 
+                    user_id,
+                    user_username,
+                    title, 
+                    content, 
+                    media, 
+                    file: fileData, 
+                    url 
+                }])
+                .select();
 
             if (error) {
                 throw error;
             }
+
             setTitle('');
             setContent('');
             setMedia('');
@@ -64,7 +71,7 @@ export function CreatePost() {
             setUrl('');
             setImageUrl('');
 
-            navigate('/');
+            navigate(`/post/${data[0].id}`);
         } catch (error) {
             console.error("Error creating post:", error.message);
         }
@@ -107,7 +114,7 @@ export function CreatePost() {
 
                 <div className="form-input-holder">
                     <label htmlFor="post-content">Post Content</label>
-                    <textarea className="form-input-field" id="post-content" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Post Content" required></textarea>                    
+                    <TextEditor value={content} onChange={(newContent) => setContent(newContent)} />
                 </div>
 
                 {!media && (

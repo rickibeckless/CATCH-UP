@@ -1,7 +1,10 @@
 import { Link, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
 import { supabase } from '../../App';
 import bcrypt from 'bcryptjs';
+import { MiniTextEditor } from '../../components/MiniTextEditor';
 
 export function EditProfile() {
 
@@ -29,6 +32,7 @@ export function EditProfile() {
                 throw userError;
             }
             setProfile(userData);
+            console.log(profile.username);
 
             if (!editedUsername) setEditedUsername(userData?.username || '');
             if (!editedFirst_name) setEditedFirstName(userData?.first_name || '');
@@ -67,11 +71,11 @@ export function EditProfile() {
             setEditedUserTitle('');
             setEditedPassword('');
 
-            navigate(`/`);
+            navigate(`/profile/${profile.username}`);
 
-            console.log("User created successfully");
+            console.log("User updated successfully");
         } catch (error) {
-            console.error("Error creating user:", error.message);
+            console.error("Error updating user:", error.message);
         }
     };
 
@@ -103,8 +107,6 @@ export function EditProfile() {
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
     };
 
-    //const sanitizedTitle = user?.username?.replace(/[^\w\s]/gi, '');
-
     return (
         <>
             <main id="profile-page-holder">
@@ -113,7 +115,7 @@ export function EditProfile() {
                     <h3>{profile.first_name} {profile.last_name}</h3>
                     <p>{profile.user_title}</p>
                     <h3>About Me:</h3>
-                    <p>{profile.about_me}</p>
+                    <p dangerouslySetInnerHTML={{ __html: profile.about_me }} />
                 </section>
                 <form className="edit-profile-form" onSubmit={handleUpdate}>
                     <div className="form-input-holder">
@@ -141,7 +143,7 @@ export function EditProfile() {
 
                     <div className="form-input-holder">
                         <label htmlFor="form-about">About Me: </label>
-                        <textarea className="form-input-field" id="form-about" onChange={(e) => setEditedAboutMe(e.target.value)} placeholder="Hello, I'm..."></textarea>
+                        <MiniTextEditor value={editedAbout_me} onChange={(newAboutMe) => setEditedAboutMe(newAboutMe)} />
                     </div>
 
                     <div className="form-input-holder">

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../../App';
 import bcrypt from 'bcryptjs';
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export function SignIn() {
     
@@ -55,6 +55,12 @@ export function SignIn() {
 
                 <div className="signin-btn-holder">
                     <button type="submit" id="signin-btn">Sign-In</button>
+                    <div>
+                        <p>Don't have an account?</p>
+                        <button type="button" id="signup-btn">
+                            <Link to="/signup">Sign-Up</Link>
+                        </button>
+                    </div>
                 </div>
             </form>
         </main>

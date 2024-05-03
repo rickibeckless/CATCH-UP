@@ -1,4 +1,5 @@
 @import url('./css/HomeStyles/HomeStyles.css');
+@import url('./css/postStyles/SanitizedTextStyles.css');
 
 #main-navbar {
     position: sticky;

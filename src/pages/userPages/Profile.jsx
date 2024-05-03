@@ -1,5 +1,7 @@
 import { Link, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import parse from 'html-react-parser';
+import DOMPurify from "dompurify";
 import { supabase } from '../../App';
 
 export function Profile() {
@@ -72,6 +74,7 @@ export function Profile() {
     };
 
     const sanitizedTitle = user?.username?.replace(/[^\w\s]/gi, '');
+    const sanitizedReadMe = DOMPurify.sanitize(user.about_me, { USE_PROFILES: { html: true } });
 
     return (
         <>
@@ -81,7 +84,13 @@ export function Profile() {
                     <h3>{user.first_name} {user.last_name}</h3>
                     <p>{user.user_title}</p>
                     <h3>About Me:</h3>
-                    <p>{user.about_me}</p>
+                    <div className="sanitizedText">{parse(sanitizedReadMe)}</div>
+                    <div className="user-stats">
+                        <p>Member Since: {formatDate(user.created_at)}</p>
+                        <p>Posts: {user.posts_count}</p>
+                        <p>Comments: {user.comments_count}</p>
+                        <p>Upvotes: {user.upvotes_count}</p>
+                    </div>
                     <Link to={`/profile/${user.username}/edit`}>Edit Profile</Link>
                 </section>
                 <section id="user-key-works">

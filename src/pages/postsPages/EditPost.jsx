@@ -3,7 +3,12 @@ import { supabase } from '../../App';
 import { Link, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export function EditPost() {
+
+    /**
+     * I need to fetch the post and then update it. view project a for referencing
+    */
     
+    const { id } = useParams();
     const user_id = localStorage.getItem('userId');
     const [post, setPost] = useState([]);
     const [user_username, setUserUsername] = useState('');
@@ -72,7 +77,7 @@ export function EditPost() {
                 file: editedFile,
                 url: editedUrl,
                 updated_at: new Date()
-            }).eq('user_id', user_id);
+            }).eq('id', id);
 
             if (updateError) {
                 throw updateError;
@@ -80,7 +85,7 @@ export function EditPost() {
 
             await fetchPost();
             console.log("Post updated successfully");
-            navigate(`/post/${user_id}`);
+            navigate(`/post/${id}`);
         } catch (error) {
             console.log("Error updating post:", error.message);
         }

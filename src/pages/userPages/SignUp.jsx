@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from 'react';
 import bcrypt from 'bcryptjs';
 import { supabase } from '../../App';
@@ -50,14 +50,21 @@ export function SignUp() {
         }
     };
 
+    const handleChange = (e) => {
+        const value = e.target.value;
+        // Regular expression to disallow certain characters (in this case, only allow alphanumeric characters and underscores)
+        const validUsername = value.replace(/[^A-Za-z0-9_]/g, '');
+        setUsername(validUsername);
+    };
+
     return (
         <main className="signup-form-holder">
             <form className="signup-form" onSubmit={handleSubmit}>
                 <div className="form-input-holder">
                     <label htmlFor="form-username">Pick a Username:<span className="form-input-required-asterisk">*</span> </label>
-                    <input className="form-input-field" type="text" id="form-username" minLength="8" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required />                    
+                    <input className="form-input-field" type="text" id="form-username" minLength="8" value={username} onChange={handleChange} placeholder="Username" required />                    
                     <div className="form-input-additional">
-                        <p>Username must be at least 8 character long and unique.</p>
+                        <p>Username must be at least 8 character long and unique. No special characters (sans underscores _)</p>
                     </div>
                 </div>
 
@@ -86,6 +93,12 @@ export function SignUp() {
 
                 <div className="signup-btn-holder">
                     <button type="submit" id="signup-btn">Sign-Up</button>
+                    <div>
+                        <p>Already have an account?</p>
+                        <button type="button" id="signin-btn">
+                            <Link to="/signin">Sign-In</Link>
+                        </button>
+                    </div>
                 </div>
             </form>
         </main>
