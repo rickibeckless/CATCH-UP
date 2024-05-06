@@ -55,18 +55,32 @@ export function Home() {
     return (
         <>
             <main id="blog-preview">
-                <h3 id="blog-preview-header" className={previewAtTop ? " preview-header-top" : ""}>Top Blogs From Our Users:</h3>
-                <div id="blog-card-holder">
-                    <div className="blog-card">
-                        {posts.map(post => (
-                            <div key={post._id} className="post">
+                <h3 id="blog-preview-header" className={previewAtTop ? " preview-header-top" : ""}>Top Posts From Our Users:</h3>
+                <div className="blog-cards">
+                    {posts?.map(post => (
+                        <div key={post._id} className="home-preview-post">
+                            <div className="preview-post-heading">
                                 <h2>{post.title}</h2>
                                 <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
-                                <p>{parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}</p>
-                                <Link to={`/post/${post.id}`}>Read More</Link>
                             </div>
-                        ))}
-                    </div>
+                            <div className="preview-post-stats">
+                                <p>Upvotes: {post.upvotes}</p>
+                                <p>Comments: {post.comments}</p>
+                            </div>
+                            <p className="preview-post-content">
+                                {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
+                                    <>
+                                        {`${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...`} 
+                                        <span className="preview-post-read-more">
+                                            <Link to={`/post/${post.id}`}>read more.</Link>
+                                        </span>
+                                    </>
+                                    : parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')
+                                )}
+                            </p>
+                            
+                        </div>
+                    ))}
                 </div>
                 <h4 id="blog-preview-stats">blah</h4>
             </main>
