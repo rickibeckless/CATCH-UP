@@ -27,8 +27,6 @@ export function Home() {
                 const slicedData = postData.slice(0, 5);
                 const sortedData = slicedData.sort((a, b) => b.upvotes - a.upvotes);
 
-                console.log("Posts:", sortedData);
-
                 const totalComments = postData.reduce((acc, post) => acc + post.comments, 0);
                 setComments(totalComments);
 
@@ -53,8 +51,6 @@ export function Home() {
                     throw userError;
                 }
 
-                console.log("Users:", userData);
-
                 setUsers(userData);
             } catch (error) {
                 console.error("Error fetching users:", error.message);
@@ -64,6 +60,12 @@ export function Home() {
         fetchPosts();
         fetchUsers();
     }, [supabase, id]);
+
+    const setSortBy = (e) => {
+        const value = e.target.value;
+        localStorage.setItem('sort-by', value);
+        setSortBy(value);
+    };
 
     useEffect(() => {
         window.addEventListener('scroll', () => {
@@ -116,25 +118,33 @@ export function Home() {
                 <div id="blog-preview-stats-holder">
                     <h3 id="blog-preview-stats-header">Total Number of: </h3>
                     <div id="blog-preview-stats">
-                        <div className="blog-preview-stats-totals">
-                            <p>Users: </p>
-                            <h4>{users.length}</h4>
-                        </div>
+                        <Link to={`/post/all?sortBy=sort-uaz`}>
+                            <div className="blog-preview-stats-totals">
+                                <p>Users: </p>
+                                <h4>{users.length}</h4>
+                            </div>
+                        </Link>
 
-                        <div className="blog-preview-stats-totals">
-                            <p>Posts: </p>
-                            <h4>{posts.length}</h4>
-                        </div>
+                        <Link to={`/post/all`}>
+                            <div className="blog-preview-stats-totals">
+                                <p>Posts: </p>
+                                <h4>{posts.length}</h4>
+                            </div>
+                        </Link>
 
-                        <div className="blog-preview-stats-totals">
-                            <p>Upvotes: </p>
-                            <h4>{upvotes}</h4>
-                        </div>
+                        <Link to={`/post/all?sortBy=sort-votes`}>
+                            <div className="blog-preview-stats-totals">
+                                <p>Upvotes: </p>
+                                <h4>{upvotes}</h4>
+                            </div>
+                        </Link> 
 
-                        <div className="blog-preview-stats-totals">
-                            <p>Comments: </p>
-                            <h4>{comments}</h4>
-                        </div>                        
+                        <Link to={`/post/all?sortBy=sort-comments`}>
+                            <div className="blog-preview-stats-totals">
+                                <p>Comments: </p>
+                                <h4>{comments}</h4>
+                            </div>
+                        </Link>
                     </div>
                     <h4 id="blog-preview-stats-words">
                         And 
@@ -144,5 +154,5 @@ export function Home() {
                 </div>
             </main>
         </>
-    )
-}
+    );
+};

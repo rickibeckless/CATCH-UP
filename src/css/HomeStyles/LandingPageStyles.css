@@ -1,6 +1,6 @@
 #home-landing {
     height: 88dvh;
-    background-image: url('../../../public/imgs/pexels-samson-katt-5256140.jpg');
+    background-image: url('/imgs/pexels-samson-katt-5256140.jpg');
     background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;

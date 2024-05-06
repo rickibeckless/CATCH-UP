@@ -9,7 +9,11 @@ export function Gallery() {
     const { id } = useParams();
     const [posts, setPosts] = useState([]);
     const [comment, setComment] = useState([]);
-    const [sortBy, setSortBy] = useState('sort_date');
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    let sortBy = queryParams.get('sortBy') || "sort_date";
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -21,18 +25,27 @@ export function Gallery() {
                     throw postError;
                 }
 
-                if (sortBy === 'sort_date') { // sort by creation date
+                if (sortBy === 'sort-date') { // sort by creation date
                     postData.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-                } else if (sortBy === 'sort_votes') { // sort by upvote count
+
+                } else if (sortBy === 'sort-votes') { // sort by upvote count
                     postData.sort((a, b) => b.upvotes - a.upvotes);
-                } else if (sortBy === 'sort_taz') { // sort by title A-Z
+
+                } else if (sortBy === 'sort-comments') { // sort by comment count
+                    postData.sort((a, b) => b.comments - a.comments);
+
+                } else if (sortBy === 'sort-taz') { // sort by title A-Z
                     postData.sort((a, b) => a.title.toUpperCase().localeCompare(b.title));
-                } else if (sortBy === 'sort_tza') { // sort by title Z-A
+
+                } else if (sortBy === 'sort-tza') { // sort by title Z-A
                     postData.sort((a, b) => b.title.toUpperCase().localeCompare(a.title));
-                } else if (sortBy === 'sort_uaz') { // sort by user A-Z
+
+                } else if (sortBy === 'sort-uaz') { // sort by user A-Z
                     postData.sort((a, b) => a.user_username.toUpperCase().localeCompare(b.user_username));
-                } else if (sortBy === 'sort_uza') { // sort by user Z-A
+
+                } else if (sortBy === 'sort-uza') { // sort by user Z-A
                     postData.sort((a, b) => b.user_username.toUpperCase().localeCompare(a.user_username));
+
                 }
 
                 setPosts(postData);
@@ -82,7 +95,7 @@ export function Gallery() {
     };
 
     const handleSortChange = (e) => {
-        setSortBy(e.target.value);
+        navigate(`?sortBy=${e.target.value}`)
     };
 
     return (
@@ -90,12 +103,13 @@ export function Gallery() {
             <section>
                 <label htmlFor="sort-list">Sort by: </label>
                 <select id="sort-list" value={sortBy} onChange={handleSortChange}>
-                    <option value="sort_date">post date</option>
-                    <option value="sort_votes">vote count</option>
-                    <option value="sort_taz">title A-Z</option>
-                    <option value="sort_tza">title Z-A</option>
-                    <option value="sort_uaz">user A-Z</option>
-                    <option value="sort_uza">user Z-A</option>
+                    <option value="sort-date">post date</option>
+                    <option value="sort-votes">vote count</option>
+                    <option value="sort-comments">comment count</option>
+                    <option value="sort-taz">title A-Z</option>
+                    <option value="sort-tza">title Z-A</option>
+                    <option value="sort-uaz">user A-Z</option>
+                    <option value="sort-uza">user Z-A</option>
                 </select>
             </section>
             <main id="blog-gallery">
@@ -107,7 +121,11 @@ export function Gallery() {
                             <div key={post._id} className="post">
                                 <h2>{post.title}</h2>
                                 <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
-                                <p>{parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}</p>
+                                <p>
+                                    {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
+                                    `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : 
+                                    parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
+                                </p>
                                 <Link to={`/post/${post.id}`}>Read More</Link>
                             </div>
                         ))}

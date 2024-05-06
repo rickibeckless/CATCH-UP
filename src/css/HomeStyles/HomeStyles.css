@@ -127,6 +127,11 @@
     margin: 5vh 0;
 }
 
+#blog-preview-stats a {
+    text-decoration: none;
+    color: #3e2f1e;
+}
+
 .blog-preview-stats-totals {
     display: flex;
     flex-direction: column;
@@ -137,7 +142,7 @@
 
     padding: 1%;
     border-radius: 10px;
-    width: 10%;
+    width: 15vw;
 }
 
 .blog-preview-stats-totals:hover {
@@ -151,15 +156,17 @@
 
 .blog-preview-stats-totals h4 {
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 3px;
 
-    transition: font-size .5s ease-in-out;
+    transition: all .5s ease-in-out;
 }
 
 .blog-preview-stats-totals:hover h4 {
     color: #faffe5;
     font-size: 2.1rem;
+    font-weight: 700;
+    letter-spacing: 5px;
 }
 
 #blog-preview-stats-words {

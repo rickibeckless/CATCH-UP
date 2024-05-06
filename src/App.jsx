@@ -41,7 +41,7 @@ function App() {
             console.log('User is not logged in');
         }
     }, [location.pathname, userId]);
-
+    
     const fetchUsername = async (userId) => {
         try {
             const { data, error } = await supabase
