@@ -37,10 +37,13 @@
 
     background-size: 200% 100%;
     animation: gradient-home 5s linear infinite ;
+
+    transition: bottom 1s ease-in-out;
 }
 
 .welcome-text.top-text {
     position: sticky;
+    bottom: 40%;
 
     width: initial;
     height: 100%;

@@ -33,10 +33,6 @@
     margin: 10vh 5vw;
 }
 
-/* #blog-card-holder.home-blog-card-margin {
-    margin-top: 0;
-} */
-
 .home-preview-post {
     margin: 1rem;
     padding: 1rem;
@@ -55,7 +51,7 @@
     overflow-y: auto;
 }
 
-.home-preview-post a {
+.home-preview-post-links {
     color: #3e2f1e;
     text-decoration: none;
     border-bottom: 1px solid #3e2f1e;
@@ -69,6 +65,13 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+}
+
+.home-preview-post-title {
+    text-decoration: none;
+    color: #3e2f1e;
+    font-weight: 600;
+    font-size: 1.5rem;
 }
 
 .preview-post-stats {
@@ -87,4 +90,91 @@
     margin-left: auto;
     font-weight: 400;
     font-size: 1rem;
+}
+
+#blog-preview-stats-holder {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 5vh 0;
+    width: 100%;
+}
+
+#blog-preview-stats-header {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #3e2f1e;
+
+    letter-spacing: 3px;
+    font-variant: small-caps;
+    text-align: center;
+
+    /* background: #ffffff linear-gradient(351deg, #ffffff, #dcaa8f, #9dc4b9);
+    background-size: 300% 100%;
+    animation: gradient-nav 2s ease-in-out 2 alternate; */
+}
+
+#blog-preview-stats {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+
+    margin: 5vh 0;
+}
+
+.blog-preview-stats-totals {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: #3e2f1e;
+
+    padding: 1%;
+    border-radius: 10px;
+    width: 10%;
+}
+
+.blog-preview-stats-totals:hover {
+    background-color: #dcaa8f;
+}
+
+.blog-preview-stats-totals p {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.blog-preview-stats-totals h4 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+
+    transition: font-size .5s ease-in-out;
+}
+
+.blog-preview-stats-totals:hover h4 {
+    color: #faffe5;
+    font-size: 2.1rem;
+}
+
+#blog-preview-stats-words {
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+#blog-preview-stats-word-count {
+    font-size: 2rem;
+    font-weight: 600;
+
+    background: #ffffff linear-gradient(351deg, #faffe5, #18120b, #dcaa8f, #9dc4b9);
+    -webkit-background-clip: text;
+    color: transparent;
+
+    background-size: 300% 100%;
+    animation: gradient-nav 1s ease-in-out infinite alternate;
 }

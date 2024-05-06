@@ -6,7 +6,7 @@ Created by: **Ricki Beckless**
 
 This web app: **CATCH-UP! Project Description...**
 
-Time spent: **78** hours spent in total
+Time spent: **80** hours spent in total
 
 <!-- ## Features
 
