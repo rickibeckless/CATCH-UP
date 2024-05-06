@@ -9,6 +9,7 @@ export function Home() {
     const { id } = useParams();
     const [posts, setPosts] = useState([]);
     const [comment, setComment] = useState([]);
+    const [previewAtTop, setPreviewAtTop] = useState(false);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -32,6 +33,12 @@ export function Home() {
         fetchPosts();
     }, [supabase, id]);
 
+    useEffect(() => {
+        window.addEventListener('scroll', () => {
+            setPreviewAtTop(window.scrollY >= 50);
+        });
+    }), [window.scrollY];
+
     const formatDate = (isoDate) => {
         const date = new Date(isoDate);
         return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric',  });
@@ -48,8 +55,7 @@ export function Home() {
     return (
         <>
             <main id="blog-preview">
-                <h1>blah</h1>
-                <p>blah</p>
+                <h3 id="blog-preview-header" className={previewAtTop ? " preview-header-top" : ""}>Top Blogs From Our Users:</h3>
                 <div id="blog-card-holder">
                     <div className="blog-card">
                         {posts.map(post => (
@@ -62,6 +68,7 @@ export function Home() {
                         ))}
                     </div>
                 </div>
+                <h4 id="blog-preview-stats">blah</h4>
             </main>
         </>
     )

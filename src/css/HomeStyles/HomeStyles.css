@@ -2,5 +2,27 @@
 
 #blog-preview {
     min-height: 100vh; /* temp */
+    background-color: #ffffff;
+    position: relative;
+}
+
+#blog-preview-header {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3e2f1e;
+
+    letter-spacing: 3px;
+    font-variant: small-caps;
+    text-align: center;
+
+    background: #ffffff linear-gradient(351deg, #ffffff, #dcaa8f, #9dc4b9);
+    background-size: 300% 100%;
+    animation: gradient-nav 2s ease-in-out 2 alternate;
+}
+
+#blog-preview-header.preview-header-top {
+    font-size: 2.5rem;
+    position: sticky;
+    top: 7vh;
     
 }

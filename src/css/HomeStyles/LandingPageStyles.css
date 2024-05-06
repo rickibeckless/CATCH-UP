@@ -1,11 +1,110 @@
 #home-landing {
-    height: 94dvh;
-    background: #ffffff linear-gradient(351deg, #ffffff, #faffe5);
-    background-size: 600% 100%;
-    animation: gradient-home 5s linear infinite alternate;
+    height: 88dvh;
+    background-image: url('../../../public/imgs/pexels-samson-katt-5256140.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+
+}
+
+.welcome-text-container {
+    height: 72%;
+    width: 60%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.welcome-text-container.top-container {
+    height: initial;
+}
+
+.welcome-text {
+    width: 55%;
+    position: fixed;
+    bottom: 50%;
+    left: 2%;
+    overflow: hidden;
+
+    background-image: linear-gradient(50deg, #ffffff, #faffe5, #18120b, #faffe5, #ffffff);
+    -webkit-background-clip: text;
+    color: transparent;
+
+    background-size: 200% 100%;
+    animation: gradient-home 5s linear infinite ;
+}
+
+.welcome-text.top-text {
+    position: sticky;
+
+    width: initial;
+    height: 100%;
 }
 
 @keyframes gradient-home {
-    0% {background-position: 0%;}
-    100% {background-position: 100%;}
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+#home-text-welcome {
+    font-size: 5rem;
+    font-weight: 700;
+    text-align: right;
+    letter-spacing: 5px;
+    font-variant: small-caps;
+    text-transform: lowercase;
+}
+
+#home-text-welcome.top-logo {
+    position: fixed;
+    z-index: 25;
+    height: 10vh;
+    top: 0;
+    left: 40%;
+
+    color: red;
+}
+
+#home-text-description {
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1rem;
+
+    width: 65%;
+}
+
+#home-text-description-label {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    font-variant: small-caps;
+    text-transform: lowercase;
+}
+
+.welcome-text-site-description {
+    position: fixed;
+    bottom: 15%;
+    left: 5%;
+
+    background-color: #627861bf;
+    width: 40%;
+    border-radius: 25px;
+
+    padding: 2%;
+
+    opacity: 85%;
+}
+
+.welcome-text-site-description-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 3px;
+    text-shadow: 1px 1px 10px #18120b;
 }

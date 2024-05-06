@@ -4,20 +4,61 @@
 #main-navbar {
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 20;
 
-    height: 6vh;
-
-    background: #ffffff linear-gradient(351deg, #ffffff, #faffe5);
+    background: #ffffff linear-gradient(351deg, #ffffff, #dcaa8f, #9dc4b9);
     background-size: 600% 100%;
-    animation: gradient-home 5s linear infinite alternate;
-    border-bottom: 1px solid #ffffff;
+    animation: gradient-nav 2s ease-in-out 2 alternate;
 
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
+    align-items: center;
+}
+
+@keyframes gradient-nav {
+    0% { background-position: 0%; }
+    100% { background-position: 100%; }
 }
 
 .navbar-links {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #3e2f1e;
+    text-decoration: none;
+    letter-spacing: 1px;
 
+    padding: .5rem;
+
+    transition: letter-spacing .5s ease-in-out;
+}
+
+.navbar-links:hover {
+    letter-spacing: 3px;
+    color: #18120b;
+    font-weight: 700;
+}
+
+#main-navbar.preview-header-top .navbar-links {
+    font-size: 1rem;
+}
+
+#account-links {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#logout-link {
+    color: #9dc4b9;
+    text-transform: uppercase;
+
+    background-color: #3e2f1e;
+    margin-left: 1rem;
+}
+
+#logout-link:hover {
+    background-color: #dcaa8f;
+    color: #faffe5;
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Routes, Route, useLocation } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import './App.css'
@@ -27,6 +27,7 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
     const [user_username, setUserUsername] = useState('');
+    const [previewAtTop, setPreviewAtTop] = useState(false);
 
     useEffect(() => {
         setIsHomePage(location.pathname === '/');
@@ -87,23 +88,68 @@ function App() {
         console.log('User logged out');
     };
 
+    const scrollTop = (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (isHomePage) {
+                setPreviewAtTop(window.scrollY <= 50);
+            }
+        };
+    
+        if (isHomePage) {
+            window.addEventListener('scroll', handleScroll);
+    
+            handleScroll();
+        } else {
+            setPreviewAtTop(false);
+        }
+    
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [isHomePage]);
+
     return (
         <>
             {isHomePage ? <LandingPage /> : null}
 
-            <nav id="main-navbar">
-                <Link to="/" className="navbar-links" id="main-home-link">CATCH-UP!</Link>
+            <nav id="main-navbar" className={previewAtTop ? " preview-header-top" : ""}>
+                {!isHomePage ? 
+                    <Link to="/" className="navbar-links" id="main-home-link">CATCH-UP!</Link> : 
+                    <React.Fragment>
+                        {!previewAtTop ?
+                            <a href="#home-landing" className="navbar-links" id="main-home-link" onClick={scrollTop}>CATCH-UP!</a>
+                            : null
+                        }
+                    </React.Fragment>
+                }
+                
                 <Link to="/post/all" className="navbar-links" id="gallery-link">Gallery</Link>
 
-                {!isLoggedIn ? <Link to="/signup" className="navbar-links" id="signup-link">Sign Up</Link> : null}
-
-                {!isLoggedIn ? <Link to="/signin" className="navbar-links" id="signin-link">Sign In</Link> : null}
-
-                {isLoggedIn ? <Link to="/new-post" className="navbar-links" id="new-post-link">New Post</Link> : null}
-
-                {isLoggedIn ? <p>Hello, <Link to={`/profile/${username}`} className="navbar-links" id="profile-link">{username}</Link></p> : null}
-
-                {isLoggedIn ? <Link to="/" className="navbar-links" id="logout-link" onClick={handleLogout}>Logout</Link> : null}
+                {!isLoggedIn ? 
+                    <React.Fragment>
+                        <div id="account-links">
+                            <Link to="/signup" className="navbar-links" id="signup-link">Sign Up</Link> 
+                            <Link to="/signin" className="navbar-links" id="signin-link">Sign In</Link>
+                        </div>
+                        
+                    </React.Fragment>
+                :
+                    <React.Fragment>
+                        <Link to="/new-post" className="navbar-links" id="new-post-link">New Post</Link>
+                        <div id="account-links">
+                            <p id="user-greeting">Hello, <Link to={`/profile/${username}`} className="navbar-links" id="profile-link">{username}</Link></p>
+                            <Link to="/" className="navbar-links" id="logout-link" onClick={handleLogout}>Logout</Link>
+                        </div>
+                    </React.Fragment>
+                }
             </nav>
 
             <div id="main-body">
