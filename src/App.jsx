@@ -168,7 +168,9 @@ function App() {
                 </Routes>
             </div>
 
-            <footer id="main-footer"></footer>
+            <footer id="main-footer">
+                <p>Copyright &copy; 2024 Ricki Beckless. All rights reserved.</p>
+            </footer>
         </>
     )
 }

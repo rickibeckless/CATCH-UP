@@ -8,7 +8,6 @@
     display: flex;
     flex-direction: column;
     justify-content: end;
-
 }
 
 .welcome-text-container {
@@ -36,14 +35,15 @@
     color: transparent;
 
     background-size: 200% 100%;
-    animation: gradient-home 5s linear infinite ;
+    animation: gradient-home 5s linear infinite, slideIn 1s ease forwards, fadeIn 1s ease forwards;
 
-    transition: bottom 1s ease-in-out;
+    transition: bottom .5s ease-in-out, left .5s ease-in-out;
 }
 
 .welcome-text.top-text {
     position: sticky;
-    bottom: 40%;
+    bottom: 49%;
+    left: 4%;
 
     width: initial;
     height: 100%;
@@ -52,6 +52,22 @@
 @keyframes gradient-home {
     0% { background-position: 0% 0%; }
     100% { background-position: 200% 0%; }
+}
+@keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+}
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
 }
 
 #home-text-welcome {

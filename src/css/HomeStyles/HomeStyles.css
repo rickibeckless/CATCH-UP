@@ -1,5 +1,7 @@
 @import url('./LandingPageStyles.css');
 
+/* BLOG POSTS PREVIEWS STYLES */
+
 #blog-preview {
     min-height: 100vh; /* temp */
     background-color: #ffffff;
@@ -18,6 +20,8 @@
     background: #ffffff linear-gradient(351deg, #ffffff, #dcaa8f, #9dc4b9);
     background-size: 300% 100%;
     animation: gradient-nav 2s ease-in-out 2 alternate;
+
+    transition: font-size 1s ease-in-out;
 }
 
 #blog-preview-header.preview-header-top {
@@ -91,6 +95,8 @@
     font-weight: 400;
     font-size: 1rem;
 }
+
+/* BLOG STATS STYLES */
 
 #blog-preview-stats-holder {
     display: flex;

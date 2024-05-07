@@ -1,5 +1,9 @@
 @import url('./css/HomeStyles/HomeStyles.css');
 @import url('./css/postStyles/SanitizedTextStyles.css');
+@import url('./css/galleryStyles/GalleryStyles.css');
+
+
+/* NAVBAR STYLES */
 
 #main-navbar {
     position: sticky;
@@ -21,6 +25,8 @@
     100% { background-position: 100%; }
 }
 
+/* navbar links styles */
+
 .navbar-links {
     font-size: 1.5rem;
     font-weight: 600;
@@ -30,7 +36,7 @@
 
     padding: .5rem;
 
-    transition: letter-spacing .5s ease-in-out;
+    transition: letter-spacing .5s ease-in-out, font-size 1s ease-in-out;
 }
 
 .navbar-links:hover {
@@ -42,6 +48,8 @@
 #main-navbar.preview-header-top .navbar-links {
     font-size: 1rem;
 }
+
+/* navbar account links styles */
 
 #account-links {
     display: flex;
@@ -61,4 +69,19 @@
 #logout-link:hover {
     background-color: #dcaa8f;
     color: #faffe5;
+}
+
+/* FOOTER STYLES */
+
+#main-footer {
+    background: #ffffff linear-gradient(351deg, #ffffff, #dcaa8f, #9dc4b9);
+    background-size: 600% 100%;
+    animation: gradient-nav 2s ease-in-out 2 alternate;
+
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 1rem;
 }

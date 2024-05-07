@@ -1,0 +1,29 @@
+.blog-cards.date-cards.gallery-styles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40vw, 1fr));
+    grid-gap: 1rem;
+    justify-content: center;
+    margin: 5vh;
+}
+
+.blog-cards.vote-cards.gallery-styles, .blog-cards.comments-cards.gallery-styles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20vw, 1fr));
+    grid-gap: 1rem;
+    justify-content: center;
+    margin: 5vh;
+}
+
+.home-preview-post.gallery-styles {
+    border-radius: 5px;
+}
+
+.alphabet-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10vw, 1fr));
+    justify-items: center;
+    align-items: center;
+    row-gap: 1rem;
+    
+    width: 50vw;
+}

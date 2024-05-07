@@ -19,7 +19,7 @@ const LandingPage = () => {
     }), [window.scrollY];
 
     return (
-        <section id="home-landing">
+        <section id="home-landing" title="Photo by Samson Katt: https://www.pexels.com/photo/black-female-freelancer-using-laptop-and-drinking-coffee-near-dog-5256140/">
             <div className={"welcome-text-container" + (welcomeTextAtTop ? " top-container" : "")}>
                 <div className={"welcome-text" + (welcomeTextAtTop ? " top-text" : "")}>
                     <h2 id="home-text-description">
