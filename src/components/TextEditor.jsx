@@ -19,7 +19,7 @@ export function TextEditor({ value, onChange }) {
                 ['blockquote', 'code-block'],
         
                 [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['link'],
+                ['link', 'image', 'video'],
                 [{ 'script': 'sub'}, { 'script': 'super' }],
                 [{ 'indent': '-1'}, { 'indent': '+1' }],
                 [{ 'direction': 'rtl' }],
@@ -34,11 +34,14 @@ export function TextEditor({ value, onChange }) {
                 ['clean']
             ],
         },
+        clipboard: {
+            matchVisual: false,
+        },
     };
     
     const formats = [
         'header', 'bold', 'italic', 'underline', 'strike', 'blockquote',
-        'list', 'link', 'bullet', 'script', 'indent', 'direction', 'size', 'color', 'background',
+        'list', 'link', 'image', 'video', 'bullet', 'script', 'indent', 'direction', 'size', 'color', 'background',
         'font', 'align', 'clean'
     ];
 

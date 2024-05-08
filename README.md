@@ -1,4 +1,4 @@
-# "CIS 1133: Internet Technologies" Final Project - *CATCH-UP!*
+# *CATCH-UP!*
 
 Created by: **Ricki Beckless**
 
@@ -6,7 +6,7 @@ Created by: **Ricki Beckless**
 
 This web app: **CATCH-UP! Project Description...**
 
-Time spent: **90** hours spent in total
+Time spent: **100** hours spent in total
 
 <!-- ## Features
 

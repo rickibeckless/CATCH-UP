@@ -1,6 +1,6 @@
 import { Link, Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../App';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from "dompurify";
 
@@ -84,37 +84,58 @@ export function Home() {
     };
 
     const sanitizedTitle = posts?.title?.replace(/[^\w\s]/gi, '');
-    const sanitizedPost = DOMPurify.sanitize(posts.content, { USE_PROFILES: { html: true } });
+    const sanitizedPost = DOMPurify.sanitize(posts.content, {
+        USE_PROFILES: { html: true }, 
+        ALLOWED_TAGS: ['a', 'img', 'p', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'br', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'strong', 'em', 'u', 's', 'del', 'ins', 'mark', 'abbr', 'sub', 'sup', 'span', 'div'],
+        FORBID_TAGS: ['script', 'iframe', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    });
 
     return (
         <>
             <main id="blog-preview">
                 <h3 id="blog-preview-header" className={previewAtTop ? " preview-header-top" : ""}>Top Posts From Our Users:</h3>
+
                 <div className="blog-cards">
-                    {posts?.map(post => (
-                        <div key={post._id} className="home-preview-post">
-                            <div className="preview-post-heading">
-                                <Link className="home-preview-post-title" to={`/post/${post.id}`}>{post.title}</Link>
-                                <Link className="home-preview-post-links" to={`/user/${post.user_username}`}>{post.user_username}</Link>
-                            </div>
-                            <div className="preview-post-stats">
-                                <p>Upvotes: {post.upvotes}</p>
-                                <p>Comments: {post.comments}</p>
-                            </div>
-                            <p className="preview-post-content">
-                                {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
-                                    <>
-                                        {`${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...`} 
+                    {posts?.map(post => {
+                        const sanitizedContent = DOMPurify.sanitize(post.content, {
+                            USE_PROFILES: { html: true }, 
+                            ALLOWED_TAGS: ['a', 'img', 'p', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'br', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'strong', 'em', 'u', 's', 'del', 'ins', 'mark', 'abbr', 'sub', 'sup', 'span', 'div'],
+                            FORBID_TAGS: ['script', 'iframe', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+                        });
+
+                        const contentLength = sanitizedContent.length;
+                        let contentToDisplay = sanitizedContent;
+
+                        const first400Chars = sanitizedContent.slice(0, 400);
+                        const hasImage = first400Chars.includes('<img');
+
+                        if (contentLength > 400) {
+                            contentToDisplay = hasImage ? sanitizedContent : `${first400Chars}...`;
+                        }
+
+                        return (
+                            <div key={post._id} className="home-preview-post">
+                                <div className="preview-post-heading">
+                                    <Link className="home-preview-post-title" to={`/post/${post.id}`}>{post.title}</Link>
+                                    <Link className="home-preview-post-links" to={`/user/${post.user_username}`}>{post.user_username}</Link>
+                                </div>
+                                <div className="preview-post-stats">
+                                    <p>Upvotes: {post.upvotes}</p>
+                                    <p>Comments: {post.comments}</p>
+                                </div>
+                                <div className="preview-post-content">
+                                    {parse(contentToDisplay)}
+                                    {contentLength > 400 && !hasImage && (
                                         <span className="preview-post-read-more">
                                             <Link className="home-preview-post-links" to={`/post/${post.id}`}>read more</Link>
                                         </span>
-                                    </>
-                                    : parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')
-                                )}
-                            </p>
-                        </div>
-                    ))}
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
+
                 <div id="blog-preview-stats-holder">
                     <h3 id="blog-preview-stats-header">Total Number of: </h3>
                     <div id="blog-preview-stats">

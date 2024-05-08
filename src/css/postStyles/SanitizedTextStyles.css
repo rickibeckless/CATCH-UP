@@ -1,5 +1,42 @@
+#post-text.sanitizedText h1,
+#post-text.sanitizedText h2,
+#post-text.sanitizedText h3,
+#post-text.sanitizedText h4,
+#post-text.sanitizedText h5,
+#post-text.sanitizedText h6 {
+    margin: 3rem 0 1.5rem;
+}
+
+#post-text.sanitizedText h1:first-child,
+#post-text.sanitizedText h2:first-child,
+#post-text.sanitizedText h3:first-child,
+#post-text.sanitizedText h4:first-child,
+#post-text.sanitizedText h5:first-child,
+#post-text.sanitizedText h6:first-child {
+    margin: 0 0 1.5rem;
+}
+
 .sanitizedText p {
     font-size: 1rem;
     line-height: 1.5;
     margin-bottom: 1rem;
+}
+
+.sanitizedText a {
+    color: #18120b;
+    text-decoration: none;
+    font-weight: 500;
+
+    transition: all 0.3s;
+}
+
+.sanitizedText a:hover {
+    text-decoration: underline;
+    font-weight: 400;
+}
+
+.sanitizedText img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
 }

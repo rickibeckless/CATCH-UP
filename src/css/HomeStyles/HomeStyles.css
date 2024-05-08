@@ -17,7 +17,7 @@
     font-variant: small-caps;
     text-align: center;
 
-    background: #ffffff linear-gradient(351deg, #ffffff, #dcaa8f, #9dc4b9);
+    background: #ffffff linear-gradient(351deg, #dcaa8f, #ffffff, #dcaa8f, #9dc4b9, #dcaa8f, #9dc4b9);
     background-size: 300% 100%;
     animation: gradient-nav 2s ease-in-out 2 alternate;
 
@@ -39,7 +39,7 @@
 
 .home-preview-post {
     margin: 1rem;
-    padding: 1rem;
+    padding: 1rem 2rem;
     border: 1px solid #3e2f1e;
     border-radius: 5px;
     box-shadow: 0 0 5px 0 #3e2f1e;
@@ -88,6 +88,25 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+}
+
+.preview-post-content p {
+    -webkit-hyphens: auto;
+    hyphens: auto;
+
+    margin-top: 1rem;
+}
+
+.preview-post-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+}
+
+.preview-post-content ul,
+.preview-post-content ol,
+.preview-post-content li {
+    padding-left: 1rem;
 }
 
 .preview-post-read-more {

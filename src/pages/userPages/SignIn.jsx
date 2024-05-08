@@ -46,6 +46,7 @@ export function SignIn() {
                 <div className="form-input-holder">
                     <label htmlFor="form-username">Username: </label>
                     <input className="form-input-field" type="text" id="form-username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required />
+                    <p>username is case-sensitive</p>
                 </div>
 
                 <div className="form-input-holder">

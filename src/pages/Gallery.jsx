@@ -133,7 +133,18 @@ export function Gallery() {
         return characters;
     };
 
-    console.log("a-z: ", alphabetLoop());
+    const yearLoop = () => {
+        const getListedYears = posts.map(post => { 
+            return new Date(post.created_at).getFullYear();
+        });
+    
+        const uniqueYears = [...new Set(getListedYears)];
+    
+        const currentYear = new Date().getFullYear();
+        const years = uniqueYears.filter(year => year <= currentYear);
+    
+        return years;
+    }
 
     return (
         <>
@@ -148,152 +159,151 @@ export function Gallery() {
                 </select>
             </section>
             <main id="blog-gallery">
-                <h1>blah</h1>
-                <p>blah</p>
-                <div id="blog-card-holder">
-                    {posts.length === 0 && <p>No posts found.</p>}
+                {posts.length === 0 && <p>No posts found.</p>}
 
-                    {sortBy === 'sort-date' ? (
-                        <>
-                            <h4>You're sorting by date</h4>
+                {sortBy === 'sort-date' ? (
+                    <>
+                        <h4>You're sorting by date</h4>
 
-                            <div>
+                        <div className="gallery-shortcut-list">
+                            {yearLoop().reverse().map(year => (
+                                <a className="alphabet-list-letter" key={year} href={`/post/all?sortBy=sort-date#${year}`}>{year}</a>
+                            ))}
+                        </div>
 
-                                {Object.entries(dateSortedPosts).map(([year, months]) => (
-                                    <div key={year}>
-                                        <h2>{year}</h2>
-                                        {Object.entries(months).map(([month, monthPosts]) => (
-                                            <div key={month}>
-                                                <h3>{new Date(year, month - 1).toLocaleString('default', { month: 'long' })}</h3>
-                                                <div className="date-cards blog-cards gallery-styles">    
-                                                    {monthPosts.map(post => (
-                                                        <div key={post._id} className="date-post home-preview-post gallery-styles">
-                                                            <h4>{post.title}</h4>
-                                                            <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
-                                                            <p>
-                                                                {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
-                                                                    `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : 
-                                                                    parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
-                                                            </p>
-                                                            <Link to={`/post/${post.id}`}>Read More</Link>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                        <div>
+                            {Object.entries(dateSortedPosts).reverse().map(([year, months]) => (
+                                <div key={year}>
+                                    <h2 id={year}>{year}</h2>
+                                    {Object.entries(months).reverse().map(([month, monthPosts]) => (
+                                        <div key={month}>
+                                            <h3>{new Date(year, month - 1).toLocaleString('default', { month: 'long' })}</h3>
+                                            <div className="date-cards blog-cards gallery-styles">    
+                                                {monthPosts.map(post => (
+                                                    <div key={post._id} className="date-post home-preview-post gallery-styles">
+                                                        <h4>{post.title}</h4>
+                                                        <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
+                                                        <p>
+                                                            {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
+                                                                `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : 
+                                                                parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
+                                                        </p>
+                                                        <Link to={`/post/${post.id}`}>Read More</Link>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
-                                    </div>
-                                ))}
-
-                            </div>
-                        </>
-                    ) : sortBy === 'sort-votes' ? (
-                        <>
-                            <h4>You're sorting by votes</h4>
-
-                            <div className="vote-cards blog-cards gallery-styles">
-                                {posts.map(post => (
-                                    <div key={post._id} className="vote-post home-preview-post gallery-styles">
-                                        <h2>{post.title}</h2>
-                                        <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
-                                        <div className="preview-post-stats">
-                                            <p>Upvotes: {post.upvotes}</p>
                                         </div>
-                                        <p>
-                                            {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 200 ? 
-                                            `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,200)}...` : 
-                                            parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
-                                        </p>
-                                        <Link to={`/post/${post.id}`}>Read More</Link>
-                                    </div>
-                                ))}
-                            </div>
-                        </>
-                    ) : sortBy === 'sort-comments' ? (
-                        <>
-                            <h4>You're sorting by comments</h4>
-
-                            <div className="comments-cards blog-cards gallery-styles">
-                                {posts.map(post => (
-                                    <div key={post._id} className="comment-post home-preview-post gallery-styles">
-                                        <h2>{post.title}</h2>
-                                        <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
-                                        <div className="preview-post-stats">
-                                            <p>Comments: {post.comments}</p>
-                                        </div>
-                                        <p>
-                                            {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
-                                            `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : 
-                                            parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
-                                        </p>
-                                        <Link to={`/post/${post.id}`}>Read More</Link>
-                                    </div>
-                                ))}
-                            </div>
-
-                        </>
-                    ) : sortBy === 'sort-taz' ? (
-                        <>
-                            <h4>You're sorting by title A-Z</h4>
-
-                            <div className="alphabet-list">
-                                {alphabetLoop().map(letter => (
-                                    <a className="alphabet-list-letter" key={letter} href={`/post/all?sortBy=sort-taz#${letter}`}>{letter}</a>
-                                ))}
-                            </div>
-
-                            {Object.entries(alphabetTitleSortedPosts).map(([firstCharTitle, posts]) => (
-                                <div key={firstCharTitle}>
-                                    <h3 id={firstCharTitle}>{firstCharTitle}</h3>
-                                    <div className="date-cards blog-cards gallery-styles">    
-                                        {posts.map(post => (
-                                            <div key={post._id} className="date-post home-preview-post gallery-styles">
-                                                <h4>{post.title}</h4>
-                                                <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
-                                                <p>
-                                                    {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
-                                                        `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : 
-                                                        parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
-                                                </p>
-                                                <Link to={`/post/${post.id}`}>Read More</Link>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    ))}
                                 </div>
                             ))}
 
-                        </>
-                    ) : sortBy === 'sort-uaz' && (
-                        <>
-                            <h4>You're sorting by user A-Z</h4>
+                        </div>
+                    </>
+                ) : sortBy === 'sort-votes' ? (
+                    <>
+                        <h4>You're sorting by votes</h4>
 
-                            <div className="alphabet-list">
-                                {alphabetLoop().map(letter => (
-                                    <a className="alphabet-list-letter" key={letter} href={`/post/all?sortBy=sort-uaz#${letter}`}>{letter}</a>
-                                ))}
-                            </div>
-
-                            {Object.entries(alphabetUserSortedPosts).map(([firstCharUser, posts]) => (
-                                <div key={firstCharUser}>
-                                    <h3 id={firstCharUser}>{firstCharUser}</h3>
-                                    <div className="date-cards blog-cards gallery-styles">    
-                                        {posts.map(post => (
-                                            <div key={post._id} className="date-post home-preview-post gallery-styles">
-                                                <h4>{post.title}</h4>
-                                                <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
-                                                <p>
-                                                    {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
-                                                        `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : 
-                                                        parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
-                                                </p>
-                                                <Link to={`/post/${post.id}`}>Read More</Link>
-                                            </div>
-                                        ))}
+                        <div className="vote-cards blog-cards gallery-styles">
+                            {posts.map(post => (
+                                <div key={post._id} className="vote-post home-preview-post gallery-styles">
+                                    <h2>{post.title}</h2>
+                                    <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
+                                    <div className="preview-post-stats">
+                                        <p>Upvotes: {post.upvotes}</p>
                                     </div>
+                                    <p>
+                                        {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 200 ? 
+                                        `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,200)}...` : 
+                                        parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
+                                    </p>
+                                    <Link to={`/post/${post.id}`}>Read More</Link>
                                 </div>
                             ))}
-                        </>
-                    )}
-                </div>
+                        </div>
+                    </>
+                ) : sortBy === 'sort-comments' ? (
+                    <>
+                        <h4>You're sorting by comments</h4>
+
+                        <div className="comments-cards blog-cards gallery-styles">
+                            {posts.map(post => (
+                                <div key={post._id} className="comment-post home-preview-post gallery-styles">
+                                    <h2>{post.title}</h2>
+                                    <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
+                                    <div className="preview-post-stats">
+                                        <p>Comments: {post.comments}</p>
+                                    </div>
+                                    <p>
+                                        {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
+                                        `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : 
+                                        parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
+                                    </p>
+                                    <Link to={`/post/${post.id}`}>Read More</Link>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                ) : sortBy === 'sort-taz' ? (
+                    <>
+                        <h4>You're sorting by title A-Z</h4>
+
+                        <div className="gallery-shortcut-list">
+                            {alphabetLoop().map(letter => (
+                                <a className="alphabet-list-letter" key={letter} href={`/post/all?sortBy=sort-taz#${letter}`}>{letter}</a>
+                            ))}
+                        </div>
+
+                        {Object.entries(alphabetTitleSortedPosts).map(([firstCharTitle, posts]) => (
+                            <div key={firstCharTitle}>
+                                <h3 id={firstCharTitle}>{firstCharTitle}</h3>
+                                <div className="date-cards blog-cards gallery-styles">    
+                                    {posts.map(post => (
+                                        <div key={post._id} className="date-post home-preview-post gallery-styles">
+                                            <h4>{post.title}</h4>
+                                            <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
+                                            <p>
+                                                {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
+                                                    `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : 
+                                                    parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
+                                            </p>
+                                            <Link to={`/post/${post.id}`}>Read More</Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </>
+                ) : sortBy === 'sort-uaz' && (
+                    <>
+                        <h4>You're sorting by user A-Z</h4>
+
+                        <div className="gallery-shortcut-list">
+                            {alphabetLoop().map(letter => (
+                                <a className="alphabet-list-letter" key={letter} href={`/post/all?sortBy=sort-uaz#${letter}`}>{letter}</a>
+                            ))}
+                        </div>
+
+                        {Object.entries(alphabetUserSortedPosts).map(([firstCharUser, posts]) => (
+                            <div key={firstCharUser}>
+                                <h3 id={firstCharUser}>{firstCharUser}</h3>
+                                <div className="date-cards blog-cards gallery-styles">    
+                                    {posts.map(post => (
+                                        <div key={post._id} className="date-post home-preview-post gallery-styles">
+                                            <h4>{post.title}</h4>
+                                            <Link to={`/user/${post.user_username}`}>{post.user_username}</Link>
+                                            <p>
+                                                {parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).length > 400 ? 
+                                                    `${parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, '')).slice(0,400)}...` : 
+                                                    parse(DOMPurify.sanitize(post.content).replace(/<[^>]+>/g, ''))}
+                                            </p>
+                                            <Link to={`/post/${post.id}`}>Read More</Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </>
+                )}
             </main>
         </>
     )

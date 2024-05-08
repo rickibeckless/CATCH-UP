@@ -211,67 +211,142 @@ export function Post() {
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
     };
 
-    const sanitizedPost = DOMPurify.sanitize(post.content, { USE_PROFILES: { html: true } });
-    const sanitizedAboutMe = DOMPurify.sanitize(user.about_me, { USE_PROFILES: { html: true } });
+    const sanitizedPost = DOMPurify.sanitize(post.content, { 
+        USE_PROFILES: { html: true }, 
+        ALLOWED_TAGS: ['a', 'img', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'br', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'strong', 'em', 'u', 's', 'del', 'ins', 'mark', 'abbr', 'sub', 'sup', 'span', 'div', 'iframe'],
+    });
+    const sanitizedAboutMe = DOMPurify.sanitize(user.about_me, { 
+        USE_PROFILES: { html: true },
+        ALLOWED_TAGS: ['a', 'img', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'br', 'hr', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'strong', 'em', 'u', 's', 'del', 'ins', 'mark', 'abbr', 'sub', 'sup', 'span', 'div', 'iframe'] 
+    });
+
+    //console.log("user first name ", user.first_name);
+    //console.log("user last name ", user.last_name);
+
+    const smoothScroll = (e) => {
+        e.preventDefault();
+        const targetId = e.target.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 25,
+                behavior: 'smooth'
+            });
+        }
+    };
 
     return (
         <>
+            <nav id="post-page-navbar">
+                <Link to="/posts" className="post-navbar-links">Back to Posts</Link>
+                <a href="#post-comments" className="post-navbar-links" onClick={smoothScroll}>Go To Comments</a>
+            </nav>        
             <main id="post-page-holder">
-                <section id="post-full">
+                <header id="post-page-header">
                     <h1>{post.title}</h1>
-                    <p id="post-page-stats">
-                        Posted 
-                        on <span>{formatDate(post.created_at)} </span> 
-                        at <span>{formatTime(post.created_at)}</span> 
-                    </p>
+                    <div id="post-page-stats">
+                        {user.first_name ? (
+                            <p><Link className="post-page-links" to={`/user/${post.user_username}`}>{user.first_name} {user.last_name}</Link></p>
+                        ) : null }
+                        <p>-</p>
+                        <p>{formatDate(post.created_at)}</p>
+                        {/* <p>
+                            Posted 
+                            on <span>{formatDate(post.created_at)} </span> 
+                            at <span>{formatTime(post.created_at)}</span> 
+                        </p> */}
+                    </div> 
+                </header>
+                <section id="post-full">
                     <div className="sanitizedText" id="post-text">{parse(sanitizedPost)}</div>
-                    <p>Upvotes: {post.upvotes}</p>
-                    {user_id ? (
-                        <React.Fragment>
-                            <button className="upvote-btn" onClick={() => handleUpvote(post.id)}>Upvote</button>
-                            
-                            {allReadyVoted && (
-                                <p>You've Already Upvoted!</p>
-                            )}
 
-                            {voteOnOwn && (
-                                <p>Can't Upvote Own Post!</p>
-                            )}
-                        </React.Fragment>
-                    ) : (
-                        <p><Link to="/signin">Sign in</Link> to upvote</p>
-                    )}
-                    <p>Comments: {post.comments}</p>
+                    <div className="post-page-upvotes-statement">
+                        <h4>Like this CATCH-UP? Upvote it!</h4>
+                        <p>Upvotes: {post.upvotes}</p>
+                    </div>
+                    <div className="post-page-upvote">
+                        {user_id ? (
+                            <React.Fragment>
+                                <button className="upvote-btn" onClick={() => handleUpvote(post.id)}>upvote!</button>
+                                
+                                {allReadyVoted && (
+                                    <p>You Already Upvoted!</p>
+                                )}
+
+                                {voteOnOwn && (
+                                    <p>You Can't Upvote Your Own Post!</p>
+                                )}
+                            </React.Fragment>
+                        ) : (
+                            <p><Link to="/signin">Sign in</Link> to upvote</p>
+                        )}                        
+                    </div>
                 </section>
-                <section id="post-author-info">
-                    <h2>{post.user_username}</h2>
-                    <div className="sanitizedText" id="post-text">{parse(sanitizedAboutMe)}</div>
-                </section>
+                <aside id="post-author-info">
+                    <div className="sanitizedText" id="author-text">
+                        <h2>
+                            <Link className="post-page-author-link post-page-links" to={`/user/${post.user_username}`}>{post.user_username}</Link>
+                        </h2>
+                        <h4>{user.email}</h4>
+                        <h3>{user.user_title}</h3>
+                        {parse(sanitizedAboutMe)}
+                        <div className="post-author-info-stats-holder">
+                            <p>Member since: {formatDate(user.created_at)}</p>
+                            <h4>{post.user_username} has: </h4>
+                            <p className="post-author-info-stats">
+                                <span className="post-author-info-stats-nums">{user.posts_count} </span> 
+                                total posts
+                            </p>
+                            <p className="post-author-info-stats">
+                                <span className="post-author-info-stats-nums">{user.upvotes_count} </span>
+                                total post upvotes
+                            </p>
+                            <p className="post-author-info-stats">
+                                <span className="post-author-info-stats-nums">{user.comments_count} </span> 
+                                total post comments
+                            </p>
+                        </div>
+                    </div>
+                </aside>
             </main>
             <article id="post-comments">
-                <h2>Have something to say? Add a comment!</h2>
-                <section id="user-comments-holder">
-                    {post_comments?.map(comment => (
-                        <div key={comment.id} className="comment">
-                            <h3>{comment.comment_username}</h3>
-                            <div>{parse(DOMPurify.sanitize(comment.comment_content)).length > 400 ? `${parse(DOMPurify.sanitize(comment.comment_content)).slice(0,400)}...` : parse(DOMPurify.sanitize(comment.comment_content))}</div>
-                            <p>Posted on {formatDate(comment.created_at)} at {formatTime(comment.created_at)}</p>
-                        </div>
-                    ))}
-                </section>
-                
-                {user_id ? (
-                    <section id="add-comment">
-                        <form id="add-comment-form">
-                            <MiniTextEditor value={comment_content} onChange={(newComment) => setCommentContent(newComment)} />
-                            <button id="add-comment-btn" onClick={handleAddComment}>Add Comment</button>
-                        </form>
+                <div id="post-comments-header">
+                    <h2>Have something to say? Add a comment!</h2>
+                    <p>Total: {post.comments}</p>
+                </div>
+            
+                <div id="post-page-comments-holder">
+                    <section id="user-comments-holder">
+                        {post_comments?.map(comment => (
+                            <div key={comment.id} className="comment">
+                                <div className="comment-header">
+                                    <Link className="comment-username" to={`/user/${comment.comment_username}`}>
+                                        <h3>{comment.comment_username}</h3>
+                                    </Link>
+                                    <p className="comment-posted-stats">
+                                        {formatDate(comment.created_at)} 
+                                        <span>|</span>
+                                        {formatTime(comment.created_at)}
+                                    </p>
+                                </div>
+                                <div className="comment-content">{parse(DOMPurify.sanitize(comment.comment_content)).length > 400 ? `${parse(DOMPurify.sanitize(comment.comment_content)).slice(0,400)}...` : parse(DOMPurify.sanitize(comment.comment_content))}</div>
+                            </div>
+                        ))}
                     </section>
-                ) : (
-                    <section id="add-comment">
-                        <p><Link to="/signin">Sign in</Link> to add a comment</p>
-                    </section>
-                )}
+                    
+                    {user_id ? (
+                        <section id="add-comment">
+                            <form id="add-comment-form">
+                                <MiniTextEditor value={comment_content} onChange={(newComment) => setCommentContent(newComment)} />
+                                <button id="add-comment-btn" onClick={handleAddComment}>add!</button>
+                            </form>
+                        </section>
+                    ) : (
+                        <section id="add-comment">
+                            <p><Link to="/signin">Sign in</Link> to add a comment</p>
+                        </section>
+                    )}                    
+                </div>
             </article>
         </>
     )

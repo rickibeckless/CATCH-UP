@@ -26,7 +26,8 @@
 .welcome-text {
     width: 55%;
     position: fixed;
-    bottom: 50%;
+    /* bottom: 50%; */
+    top: 5vh;
     left: 2%;
     overflow: hidden;
 
@@ -79,7 +80,7 @@
     text-transform: lowercase;
 }
 
-#home-text-welcome.top-logo {
+/* #home-text-welcome.top-logo {
     position: fixed;
     z-index: 25;
     height: 10vh;
@@ -87,7 +88,7 @@
     left: 40%;
 
     color: red;
-}
+} */
 
 #home-text-description {
     font-size: 1.6rem;
@@ -126,4 +127,5 @@
     color: #ffffff;
     letter-spacing: 3px;
     text-shadow: 1px 1px 10px #18120b;
+    text-align: justify;
 }

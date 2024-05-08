@@ -1,6 +1,7 @@
 @import url('./css/HomeStyles/HomeStyles.css');
 @import url('./css/postStyles/SanitizedTextStyles.css');
 @import url('./css/galleryStyles/GalleryStyles.css');
+@import url('./css/postStyles/postStyles.css');
 
 
 /* NAVBAR STYLES */
@@ -45,6 +46,10 @@
     font-weight: 700;
 }
 
+/* #main-navbar.preview-header-top {
+    height: 7vh;
+} */
+
 #main-navbar.preview-header-top .navbar-links {
     font-size: 1rem;
 }
@@ -71,6 +76,12 @@
     color: #faffe5;
 }
 
+/* MAIN BODY STYLES */
+
+#main-body {
+    min-height: 100dvh;
+}
+
 /* FOOTER STYLES */
 
 #main-footer {
@@ -80,8 +91,12 @@
 
     display: flex;
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
 
     padding: 1rem;
+}
+
+#footer-cr-statement {
+    font-size: .9rem;
 }

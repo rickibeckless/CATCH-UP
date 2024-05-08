@@ -86,6 +86,8 @@ function App() {
         localStorage.removeItem('userId');
         setIsLoggedIn(false);
         console.log('User logged out');
+
+        navigate('/');
     };
 
     const scrollTop = (e) => {
@@ -169,7 +171,7 @@ function App() {
             </div>
 
             <footer id="main-footer">
-                <p>Copyright &copy; 2024 Ricki Beckless. All rights reserved.</p>
+                <p id="footer-cr-statement">Copyright &copy; 2024 Ricki Beckless. All rights reserved.</p>
             </footer>
         </>
     )
