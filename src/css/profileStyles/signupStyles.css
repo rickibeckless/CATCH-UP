@@ -1,0 +1,69 @@
+.signup-form-holder {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas: "info form";
+    justify-items: center;
+    align-items: center;
+
+    min-height: 100dvh;    
+}
+
+.signup-info {
+    grid-area: info;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.signup-form {
+    grid-area: form;
+
+    border: 2px solid black;
+    box-shadow: 2px 2px 5px black;
+
+    width: 30vw;
+    height: 70vh;
+    padding: 5%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+.signup-form .form-input-holder {
+    display: grid;
+    grid-template-areas: "label input";
+}
+
+.signup-form .form-input-holder label {
+    grid-area: label;
+    padding: 5px;
+}
+
+.signup-form .form-input-holder .form-input-field {
+    grid-area: input;
+    padding: 5px;
+}
+
+/* input:focus {
+    color: red;
+} */
+
+.form-input-add { /* .signup-form .form-input-holder .form-input-add { */
+    color: #333333;
+    background-color: #e5e5e5;
+    padding: 1%;
+    font-size: .85rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+
+/* if element requires a condition to be met to be displayed and it is currently unmet: */
+.no-show-element {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+}

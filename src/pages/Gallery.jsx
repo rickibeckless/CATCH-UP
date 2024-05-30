@@ -128,7 +128,7 @@ export function Gallery() {
         const characters = [];
         for (let i = 65; i <= 90; i++) {
             characters.push(String.fromCharCode(i));
-        }
+        };
 
         return characters;
     };
@@ -144,10 +144,10 @@ export function Gallery() {
         const years = uniqueYears.filter(year => year <= currentYear);
     
         return years;
-    }
+    };
 
     return (
-        <>
+        <div id="gallery-wrapper">
             <section>
                 <label htmlFor="sort-list">Sort by: </label>
                 <select id="sort-list" value={sortBy} onChange={handleSortChange}>
@@ -305,6 +305,6 @@ export function Gallery() {
                     </>
                 )}
             </main>
-        </>
+        </div>
     )
 }

@@ -12,6 +12,7 @@ export function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [user, setUser] = useState('');
+    let [isFocused, setIsFocused] = useState(null);
 
     const navigate = useNavigate();
 
@@ -57,15 +58,46 @@ export function SignUp() {
         setUsername(validUsername);
     };
 
+    const handleInfoClick = () => {
+        setIsFocused(!isFocused);
+    };
+
+    const handleFocus = (id) => {
+        setIsFocused(id);
+    };
+
+    const handleBlur = () => {
+        setIsFocused(null);
+    }
+
     return (
         <main className="signup-form-holder">
+            <aside className="signup-info">
+                <div className="back-btn">
+                    <Link to="/">
+                        <button>Back</button>
+                    </Link>
+                </div>
+
+                <h1>Sign-Up</h1>
+                <p>Sign-up to create an account and start sharing your thoughts with the world.</p>
+
+                <div className="add-info">
+                    <h2>Why Sign-Up and Catch-Up?</h2>
+                    <ul>
+                        <li>Share your thoughts with the world</li>
+                        <li>Connect with other users</li>
+                        <li>Follow your favorite users</li>
+                    </ul>
+                </div>
+            </aside>
             <form className="signup-form" onSubmit={handleSubmit}>
                 <div className="form-input-holder">
                     <label htmlFor="form-username">Pick a Username:<span className="form-input-required-asterisk">*</span> </label>
-                    <input className="form-input-field" type="text" id="form-username" minLength="8" value={username} onChange={handleChange} placeholder="Username" required />                    
-                    <div className="form-input-additional">
-                        <p>Username must be at least 8 character long and unique. No special characters (sans underscores _)</p>
-                    </div>
+                    <input className="form-input-field" type="text" id="form-username" minLength="8" value={username} onFocus={() => handleFocus('username-info')} onBlur={handleBlur} onChange={handleChange} placeholder="Username" required />
+                </div>
+                <div className={`form-input-add ${isFocused !== 'username-info' ? " no-show-element" : ""}`}>
+                    <p>Username must be at least 8 character long and unique. No special characters (sans underscores _)</p>
                 </div>
 
                 <div className="form-input-holder">
@@ -85,10 +117,10 @@ export function SignUp() {
 
                 <div className="form-input-holder">
                     <label htmlFor="form-password">Create a Password:<span className="form-input-required-asterisk">*</span> </label>
-                    <input className="form-input-field" type="password" id="form-password" minLength="8" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="aBcd@123" required />
-                    <div className="form-input-additional">
-                        <p>Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.</p>
-                    </div>
+                    <input className="form-input-field" type="password" id="form-password" minLength="8" value={password} onFocus={() => handleFocus('password-info')} onBlur={handleBlur} onChange={(e) => setPassword(e.target.value)} placeholder="aBcd@123" required />
+                </div>
+                <div className={`form-input-add ${isFocused !== 'password-info' ? " no-show-element" : ""}`}>
+                    <p>Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.</p>
                 </div>
 
                 <div className="signup-btn-holder">

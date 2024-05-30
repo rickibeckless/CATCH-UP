@@ -47,6 +47,10 @@
     /* margin-right: 24vw; */
 
     grid-area: post;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 #post-page-header {

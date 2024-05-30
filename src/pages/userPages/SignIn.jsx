@@ -42,11 +42,20 @@ export function SignIn() {
 
     return (
         <main className="signin-form-holder">
+            <div className="back-btn">
+                    <Link to="/">
+                        <button>Back</button>
+                    </Link>
+            </div>
+            
             <form className="signin-form" onSubmit={handleSubmit}>
                 <div className="form-input-holder">
                     <label htmlFor="form-username">Username: </label>
-                    <input className="form-input-field" type="text" id="form-username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required />
-                    <p>username is case-sensitive</p>
+                    
+                    <div className="input-details">
+                        <input className="form-input-field" type="text" id="form-username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required />
+                        <p>username is case-sensitive</p>
+                    </div>
                 </div>
 
                 <div className="form-input-holder">
@@ -56,7 +65,7 @@ export function SignIn() {
 
                 <div className="signin-btn-holder">
                     <button type="submit" id="signin-btn">Sign-In</button>
-                    <div>
+                    <div id="signin-signup-btn-holder">
                         <p>Don't have an account?</p>
                         <button type="button" id="signup-btn">
                             <Link to="/signup">Sign-Up</Link>

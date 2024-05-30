@@ -2,9 +2,19 @@
 @import url('./css/postStyles/SanitizedTextStyles.css');
 @import url('./css/galleryStyles/GalleryStyles.css');
 @import url('./css/postStyles/postStyles.css');
+@import url('./css/profileStyles/signinStyles.css');
+@import url('./css/profileStyles/signupStyles.css');
+
+@import url('./css/responsiveStyles/AppResponsive.css');
 
 
 /* NAVBAR STYLES */
+
+#main-navbar.preview-header-top {
+    height: 5vh;
+
+    transition: height 1s ease-in-out;
+}
 
 #main-navbar {
     position: sticky;
@@ -19,6 +29,8 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
+
+    height: auto;
 }
 
 @keyframes gradient-nav {
@@ -45,10 +57,6 @@
     color: #18120b;
     font-weight: 700;
 }
-
-/* #main-navbar.preview-header-top {
-    height: 7vh;
-} */
 
 #main-navbar.preview-header-top .navbar-links {
     font-size: 1rem;
@@ -79,7 +87,7 @@
 /* MAIN BODY STYLES */
 
 #main-body {
-    min-height: 100dvh;
+    /* min-height: 100dvh; */
 }
 
 /* FOOTER STYLES */
@@ -99,4 +107,11 @@
 
 #footer-cr-statement {
     font-size: .9rem;
+    color: #3e2f1e;
+}
+
+#footer-cr-link {
+    color: #3e2f1e;
+    text-decoration: none;
+    font-weight: 700;
 }

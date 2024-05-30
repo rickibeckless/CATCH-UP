@@ -238,7 +238,7 @@ export function Post() {
     return (
         <>
             <nav id="post-page-navbar">
-                <Link to="/posts" className="post-navbar-links">Back to Posts</Link>
+                <Link to="/post/all" className="post-navbar-links">Back to Posts</Link>
                 <a href="#post-comments" className="post-navbar-links" onClick={smoothScroll}>Go To Comments</a>
             </nav>        
             <main id="post-page-holder">
@@ -260,26 +260,28 @@ export function Post() {
                 <section id="post-full">
                     <div className="sanitizedText" id="post-text">{parse(sanitizedPost)}</div>
 
-                    <div className="post-page-upvotes-statement">
-                        <h4>Like this CATCH-UP? Upvote it!</h4>
-                        <p>Upvotes: {post.upvotes}</p>
-                    </div>
-                    <div className="post-page-upvote">
-                        {user_id ? (
-                            <React.Fragment>
-                                <button className="upvote-btn" onClick={() => handleUpvote(post.id)}>upvote!</button>
-                                
-                                {allReadyVoted && (
-                                    <p>You Already Upvoted!</p>
-                                )}
+                    <div className="add-post-info">
+                        <div className="post-page-upvotes-statement">
+                            <h4>Like this CATCH-UP? Upvote it!</h4>
+                            <p>Upvotes: {post.upvotes}</p>
+                        </div>
+                        <div className="post-page-upvote">
+                            {user_id ? (
+                                <React.Fragment>
+                                    <button className="upvote-btn" onClick={() => handleUpvote(post.id)}>upvote!</button>
+                                    
+                                    {allReadyVoted && (
+                                        <p>You Already Upvoted!</p>
+                                    )}
 
-                                {voteOnOwn && (
-                                    <p>You Can't Upvote Your Own Post!</p>
-                                )}
-                            </React.Fragment>
-                        ) : (
-                            <p><Link to="/signin">Sign in</Link> to upvote</p>
-                        )}                        
+                                    {voteOnOwn && (
+                                        <p>You Can't Upvote Your Own Post!</p>
+                                    )}
+                                </React.Fragment>
+                            ) : (
+                                <p><Link to="/signin">Sign in</Link> to upvote</p>
+                            )}
+                        </div>
                     </div>
                 </section>
                 <aside id="post-author-info">

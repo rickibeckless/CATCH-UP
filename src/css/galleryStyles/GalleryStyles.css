@@ -1,3 +1,7 @@
+#gallery-wrapper {
+    min-height: 100vh;
+}
+
 #blog-gallery {
     margin: 1vh 5vw;
 }

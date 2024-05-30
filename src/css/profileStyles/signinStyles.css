@@ -1,0 +1,64 @@
+.signin-form-holder {
+    background-image: url('/imgs/pexels-samson-katt-5256140.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 85vh;
+}
+
+.signin-form {
+    background-color: #627861bf;
+    border-radius: 25px;
+
+    padding: 2%;
+
+    opacity: 85%;
+
+    width: 30vw;
+    height: 40vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.signin-form .form-input-holder {
+    display: grid;
+    grid-template-areas: "label input";
+}
+
+.signin-form .form-input-holder label {
+    grid-area: label;
+    padding: 5px;
+}
+
+.signin-form .form-input-holder .input-details {
+    grid-area: input;
+    border-radius: 5px;
+    padding: 5px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.signin-form .form-input-holder .input-details .form-input-field {
+    grid-area: input;
+}
+
+.signin-btn-holder {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+
+#signin-signup-btn-holder {
+    display: flex;
+    flex-direction: column;
+}

@@ -24,6 +24,8 @@ function App() {
     const location = useLocation();
     const userId = localStorage.getItem('userId');
     const [isHomePage, setIsHomePage] = useState(location.pathname === '/');
+    const [isSignUpPage, setIsSignUpPage] = useState(location.pathname === '/signup');
+    const [isSignInPage, setIsSignInPage] = useState(location.pathname === '/signin');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
     const [user_username, setUserUsername] = useState('');
@@ -31,6 +33,8 @@ function App() {
 
     useEffect(() => {
         setIsHomePage(location.pathname === '/');
+        setIsSignUpPage(location.pathname === '/signup');
+        setIsSignInPage(location.pathname === '/signin');
         
         if (userId) {
             setIsLoggedIn(true);
@@ -122,37 +126,39 @@ function App() {
         <>
             {isHomePage ? <LandingPage /> : null}
 
-            <nav id="main-navbar" className={previewAtTop ? " preview-header-top" : ""}>
-                {!isHomePage ? 
-                    <Link to="/" className="navbar-links" id="main-home-link">CATCH-UP!</Link> : 
-                    <React.Fragment>
-                        {!previewAtTop ?
-                            <a href="#home-landing" className="navbar-links" id="main-home-link" onClick={scrollTop}>CATCH-UP!</a>
-                            : null
-                        }
-                    </React.Fragment>
-                }
-                
-                <Link to="/post/all" className="navbar-links" id="gallery-link">Gallery</Link>
+            {(!isSignUpPage && !isSignInPage)  &&
+                <nav id="main-navbar" className={previewAtTop ? " preview-header-top" : ""}>
+                    {!isHomePage ? 
+                        <Link to="/" className="navbar-links" id="main-home-link">CATCH-UP!</Link> : 
+                        <React.Fragment>
+                            {!previewAtTop ?
+                                <a href="#home-landing" className="navbar-links" id="main-home-link" onClick={scrollTop}>CATCH-UP!</a>
+                                : null
+                            }
+                        </React.Fragment>
+                    }
+                    
+                    <Link to="/post/all" className="navbar-links" id="gallery-link">Gallery</Link>
 
-                {!isLoggedIn ? 
-                    <React.Fragment>
-                        <div id="account-links">
-                            <Link to="/signup" className="navbar-links" id="signup-link">Sign Up</Link> 
-                            <Link to="/signin" className="navbar-links" id="signin-link">Sign In</Link>
-                        </div>
-                        
-                    </React.Fragment>
-                :
-                    <React.Fragment>
-                        <Link to="/new-post" className="navbar-links" id="new-post-link">New Post</Link>
-                        <div id="account-links">
-                            <p id="user-greeting">Hello, <Link to={`/profile/${username}`} className="navbar-links" id="profile-link">{username}</Link></p>
-                            <Link to="/" className="navbar-links" id="logout-link" onClick={handleLogout}>Logout</Link>
-                        </div>
-                    </React.Fragment>
-                }
-            </nav>
+                    {!isLoggedIn ? 
+                        <React.Fragment>
+                            <div id="account-links">
+                                <Link to="/signup" className="navbar-links" id="signup-link">Sign Up</Link> 
+                                <Link to="/signin" className="navbar-links" id="signin-link">Sign In</Link>
+                            </div>
+                            
+                        </React.Fragment>
+                    :
+                        <React.Fragment>
+                            <Link to="/new-post" className="navbar-links" id="new-post-link">New Post</Link>
+                            <div id="account-links">
+                                <p id="user-greeting">Hello, <Link to={`/profile/${username}`} className="navbar-links" id="profile-link">{username}</Link></p>
+                                <Link to="/" className="navbar-links" id="logout-link" onClick={handleLogout}>Logout</Link>
+                            </div>
+                        </React.Fragment>
+                    }
+                </nav>
+            }            
 
             <div id="main-body">
                 <Routes>
@@ -171,7 +177,11 @@ function App() {
             </div>
 
             <footer id="main-footer">
-                <p id="footer-cr-statement">Copyright &copy; 2024 Ricki Beckless. All rights reserved.</p>
+                <p id="footer-cr-statement">
+                    Copyright &copy; 2024&nbsp;
+                    <a id="footer-cr-link" href="https://github.com/rickibeckless" target="_blank" rel="nofollow noreferrer" title="Ricki Beckless GitHub">Ricki Beckless</a>
+                    . All rights reserved.
+                </p>
             </footer>
         </>
     )
