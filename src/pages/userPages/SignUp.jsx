@@ -53,7 +53,6 @@ export function SignUp() {
 
     const handleChange = (e) => {
         const value = e.target.value;
-        // Regular expression to disallow certain characters (in this case, only allow alphanumeric characters and underscores)
         const validUsername = value.replace(/[^A-Za-z0-9_]/g, '');
         setUsername(validUsername);
     };
