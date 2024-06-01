@@ -226,3 +226,16 @@
     margin-left: auto;
     padding: .2rem;
 }
+
+.upvote-section {
+    font-size: 1.9rem;
+}
+
+.upvote-btn {
+    border: none;
+    background-color: #ffffff;
+    font-size: 2rem;
+
+    margin-right: 5px;
+}
+

@@ -3,8 +3,13 @@ import React, { useState, useEffect } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from "dompurify";
 import { supabase } from '../../App';
+
 import { TextEditor } from '../../components/TextEditor';
 import { MiniTextEditor } from '../../components/MiniTextEditor';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons';
 
 export function Post() {
 
@@ -17,6 +22,7 @@ export function Post() {
     const [comment_content, setCommentContent] = useState('');
     const [voteOnOwn, setVoteOnOwn] = useState(false);
     const [allReadyVoted, setAlreadyVoted] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const navigate = useNavigate();
 
@@ -235,12 +241,20 @@ export function Post() {
         }
     };
 
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+    };
+    
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
+
     return (
         <>
             <nav id="post-page-navbar">
                 <Link to="/post/all" className="post-navbar-links">Back to Posts</Link>
                 <a href="#post-comments" className="post-navbar-links" onClick={smoothScroll}>Go To Comments</a>
-            </nav>        
+            </nav>
             <main id="post-page-holder">
                 <header id="post-page-header">
                     <h1>{post.title}</h1>
@@ -263,13 +277,19 @@ export function Post() {
                     <div className="add-post-info">
                         <div className="post-page-upvotes-statement">
                             <h4>Like this CATCH-UP? Upvote it!</h4>
-                            <p>Upvotes: {post.upvotes}</p>
+                            <p className="upvote-section">
+                                <button 
+                                    className="upvote-btn" 
+                                    onClick={() => handleUpvote(post.id)}
+                                    onMouseEnter={handleMouseEnter} 
+                                    onMouseLeave={handleMouseLeave}
+                                ><FontAwesomeIcon icon={isHovered || !voteOnOwn || !allReadyVoted ? fasHeart : farHeart} /></button>
+                                {post.upvotes}
+                            </p>
                         </div>
                         <div className="post-page-upvote">
                             {user_id ? (
-                                <React.Fragment>
-                                    <button className="upvote-btn" onClick={() => handleUpvote(post.id)}>upvote!</button>
-                                    
+                                <React.Fragment>                                    
                                     {allReadyVoted && (
                                         <p>You Already Upvoted!</p>
                                     )}
@@ -347,7 +367,7 @@ export function Post() {
                         <section id="add-comment">
                             <p><Link to="/signin">Sign in</Link> to add a comment</p>
                         </section>
-                    )}                    
+                    )}
                 </div>
             </article>
         </>

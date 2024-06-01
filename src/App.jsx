@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Routes, Route, useLocation } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
+
 import './App.css'
+
 import { Home } from './pages/Home';
 import LandingPage from './components/home/LandingPage';
 import { NotFound } from './pages/NotFound';
